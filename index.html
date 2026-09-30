@@ -1,793 +1,1201 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة الكفايات اللغوية 1 - ثانوية الأمير عبدالمحسن</title>
+  <title>منصة الكفايات اللغوية 1 | ثانوية الأمير عبدالمحسن</title>
 
-  <!-- خط تجوال عالي الوضوح للعرض الصفي -->
+  <!-- Google Fonts: Cairo & Tajawal for supreme Arabic legibility -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900;1000&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
-  <!-- أيقونات FontAwesome ومكتبة الاحتفالات Confetti -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- FontAwesome Icons & Canvas Confetti -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     :root {
-      --bg: #090e17;
-      --surface: #131d2e;
-      --surface-card: #1b283f;
-      --border: #2a3e5c;
-      --border-focus: #3b82f6;
-      --primary: #2563eb;
-      --primary-light: #60a5fa;
-      --accent-gold: #f59e0b;
-      --emerald: #10b981;
-      --rose: #ef4444;
-      --purple: #8b5cf6;
-      --cyan: #06b6d4;
-      --text: #f8fafc;
+      --bg-base: #060913;
+      --bg-card: rgba(15, 23, 42, 0.65);
+      --bg-card-hover: rgba(22, 36, 66, 0.85);
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(59, 130, 246, 0.5);
+      
+      --neon-blue: #38bdf8;
+      --neon-purple: #a855f7;
+      --neon-emerald: #10b981;
+      --neon-amber: #f59e0b;
+      --neon-rose: #f43f5e;
+      --neon-cyan: #06b6d4;
+
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
+      --text-glow: rgba(255, 255, 255, 0.9);
+      
       --base-font-size: 18px;
+      --card-radius: 24px;
     }
 
-    /* نمط تكبير الخط المخصص لشاشات البروجكتر البعيدة */
-    body.projector-zoom {
+    /* نمط البروجكتر فائق التباين وتكبير الحجم */
+    body.projector-mode {
       --base-font-size: 22px;
+      --bg-base: #030712;
+      --border-glass: rgba(255, 255, 255, 0.16);
+      --text-main: #ffffff;
+    }
+
+    body.cinema-dark {
+      --bg-base: #000000;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Tajawal', sans-serif;
-      -webkit-tap-highlight-color: transparent;
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
-      background-color: var(--bg);
-      color: var(--text);
+      background-color: var(--bg-base);
+      color: var(--text-main);
       font-size: var(--base-font-size);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       line-height: 1.7;
-      transition: font-size 0.2s ease;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.1) 0%, transparent 45%);
-      background-attachment: fixed;
+      overflow-x: hidden;
+      position: relative;
+      transition: background-color 0.4s ease, font-size 0.2s ease;
     }
 
-    /* الشريط العلوي للتحكم في البروجكتر */
-    .top-toolbar {
-      background: rgba(11, 17, 32, 0.95);
-      border-bottom: 2px solid var(--border);
-      padding: 14px 28px;
+    /* Ambient Futuristic Background Gradients */
+    .ambient-glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+      transition: all 0.5s ease;
+    }
+    .glow-1 {
+      top: -100px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #2563eb, transparent 70%);
+    }
+    .glow-2 {
+      top: 40%;
+      left: -150px;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, #7c3aed, transparent 70%);
+    }
+    .glow-3 {
+      bottom: -100px;
+      right: 30%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, #059669, transparent 70%);
+    }
+
+    /* Floating Grid Background Line effect */
+    .bg-grid-overlay {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Glass Container Standard */
+    .glass-panel {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--card-radius);
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6);
+      position: relative;
+      z-index: 2;
+    }
+
+    .nav-bar-container {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 14px 24px;
+      background: rgba(6, 9, 19, 0.82);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border-glass);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
     }
 
-    .brand-logo {
+    .brand-mark {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
+      text-decoration: none;
+    }
+
+    .brand-icon-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+      color: #fff;
+      font-size: 1.3rem;
+    }
+
+    .brand-text-block h1 {
       font-size: 1.25rem;
       font-weight: 900;
-      color: var(--primary-light);
       letter-spacing: -0.5px;
-    }
-
-    .toolbar-actions {
+      background: linear-gradient(90deg, #60a5fa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       display: flex;
-      gap: 10px;
       align-items: center;
+      gap: 8px;
     }
 
-    .tool-btn {
-      background: var(--surface-card);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 9px 18px;
-      border-radius: 10px;
-      cursor: pointer;
+    .brand-text-block p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .hud-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hud-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-glass);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 12px;
       font-weight: 700;
       font-size: 0.95rem;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .tool-btn:hover {
-      background: var(--primary);
-      border-color: var(--primary-light);
+    .hud-btn:hover {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: var(--border-glow);
       color: #fff;
       transform: translateY(-2px);
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.35);
     }
 
-    .tool-btn.active {
-      background: var(--primary);
-      border-color: var(--primary-light);
-    }
-
-    /* ترويسة المدرسة والمعلم والطالب */
-    .hero-header {
-      max-width: 1140px;
-      width: 94%;
-      margin: 22px auto 14px;
-      background: linear-gradient(135deg, rgba(27, 40, 63, 0.9), rgba(15, 23, 42, 0.95));
-      border: 2px solid var(--border-focus);
-      border-radius: 20px;
-      padding: 22px 28px;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .hero-badge {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: rgba(255, 255, 255, 0.04);
-      padding: 12px 20px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      flex: 1 1 240px;
-    }
-
-    .hero-badge i {
-      font-size: 2.1rem;
-      color: var(--accent-gold);
-    }
-
-    .hero-badge .details span {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      display: block;
-      font-weight: 500;
-    }
-
-    .hero-badge .details strong {
-      font-size: 1.2rem;
-      color: #ffffff;
-      font-weight: 800;
-    }
-
-    /* التنقل بين التبويبات */
-    .tabs-nav {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      margin: 18px auto 26px;
-      width: 94%;
-      max-width: 680px;
-    }
-
-    .tab-switch {
-      flex: 1;
-      padding: 15px 22px;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 14px;
-      color: var(--text-muted);
-      font-size: 1.15rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      transition: all 0.25s ease;
-    }
-
-    .tab-switch:hover {
-      border-color: var(--primary-light);
+    .hud-btn.active {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      border-color: #60a5fa;
       color: #fff;
+      box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
     }
 
-    .tab-switch.active {
-      background: var(--primary);
-      border-color: var(--primary-light);
-      color: #ffffff;
-      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.45);
-    }
-
-    /* هيكل الحاويات */
-    .main-wrap {
-      max-width: 1140px;
+    .hero-container {
+      max-width: 1200px;
       width: 94%;
-      margin: 0 auto 50px;
-      flex-grow: 1;
+      margin: 24px auto 10px;
+      position: relative;
+      z-index: 2;
     }
 
-    .view-section {
-      display: none;
-      animation: viewFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .view-section.active {
-      display: block;
-    }
-
-    @keyframes viewFade {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* كروت الملخصات التفصيلية */
-    .summary-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 26px;
-    }
-
-    .lesson-box {
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 20px;
-      padding: 26px 30px;
+    .hero-master-card {
+      padding: 28px 36px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(20, 29, 51, 0.75), rgba(10, 15, 30, 0.85));
+      border: 1px solid rgba(96, 165, 250, 0.25);
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
       position: relative;
       overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
 
-    .lesson-box::after {
+    .hero-master-card::before {
       content: '';
       position: absolute;
       top: 0;
       right: 0;
-      width: 7px;
-      height: 100%;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981, #f59e0b);
     }
 
-    .lesson-box.theme-blue::after { background: var(--primary-light); }
-    .lesson-box.theme-purple::after { background: var(--purple); }
-    .lesson-box.theme-emerald::after { background: var(--emerald); }
-    .lesson-box.theme-gold::after { background: var(--accent-gold); }
-
-    .lesson-head {
+    .hero-header-line {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
       gap: 16px;
-      margin-bottom: 22px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--border);
     }
 
-    .lesson-title-group {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .lesson-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-    }
-
-    .theme-blue .lesson-avatar { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-    .theme-purple .lesson-avatar { background: rgba(139, 92, 246, 0.2); color: #c084fc; }
-    .theme-emerald .lesson-avatar { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-    .theme-gold .lesson-avatar { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
-
-    .lesson-title-group h2 {
-      font-size: 1.55rem;
-      font-weight: 900;
-    }
-
-    .btn-quick-quiz {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border);
-      color: #cbd5e1;
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
+    .hero-tag {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #93c5fd;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s;
     }
 
-    .btn-quick-quiz:hover {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary-light);
+    .hero-tag-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 10px #38bdf8;
+      animation: pulseAnim 2s infinite;
     }
 
-    .concepts-grid {
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+
+    .hero-cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-      gap: 18px;
-      margin-bottom: 18px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
     }
 
-    .concept-item {
-      background: rgba(15, 23, 42, 0.65);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 14px;
-      padding: 18px;
+    @media (max-width: 900px) {
+      .hero-cards-grid { grid-template-columns: 1fr; }
     }
 
-    .concept-item h3 {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--accent-gold);
-      margin-bottom: 8px;
+    .cyber-id-card {
+      background: rgba(10, 16, 31, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 22px 24px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 18px;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
     }
 
-    .concept-item p {
-      font-size: 1rem;
-      color: #cbd5e1;
-      line-height: 1.6;
+    .cyber-id-card:hover {
+      transform: translateY(-5px);
+      background: rgba(18, 28, 54, 0.85);
+      border-color: rgba(96, 165, 250, 0.4);
+      box-shadow: 0 14px 30px -10px rgba(37, 99, 235, 0.4);
     }
 
-    .example-tag {
+    .cyber-id-card.school-card::after { background: #3b82f6; }
+    .cyber-id-card.teacher-card::after { background: #f59e0b; }
+    .cyber-id-card.student-card::after { background: #10b981; }
+
+    .cyber-id-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      height: 3px;
+      opacity: 0.6;
+      transition: height 0.3s ease;
+    }
+
+    .cyber-id-card:hover::after {
+      height: 5px;
+      opacity: 1;
+    }
+
+    .id-card-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .school-card .id-card-icon {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.25);
+    }
+
+    .teacher-card .id-card-icon {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
+    }
+
+    .student-card .id-card-icon {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+    }
+
+    .id-card-info span {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .id-card-info strong {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .tabs-wrapper {
+      max-width: 1200px;
+      width: 94%;
+      margin: 22px auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .neon-tabs-bar {
+      display: flex;
+      gap: 14px;
+      background: rgba(12, 19, 36, 0.7);
+      padding: 8px;
+      border-radius: 20px;
+      border: 1px solid var(--border-glass);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .tab-trigger {
+      flex: 1;
+      padding: 16px 24px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.18rem;
+      font-weight: 900;
+      border-radius: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tab-trigger:hover {
+      color: #ffffff;
       background: rgba(255, 255, 255, 0.05);
-      padding: 8px 14px;
-      border-radius: 8px;
+    }
+
+    .tab-trigger.active {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      box-shadow: 0 8px 25px -4px rgba(37, 99, 235, 0.6);
+    }
+
+    .tab-badge {
+      background: rgba(255, 255, 255, 0.15);
+      font-size: 0.8rem;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-weight: 800;
+    }
+
+    .tab-trigger.active .tab-badge {
+      background: #ffffff;
+      color: #1d4ed8;
+    }
+
+    .app-main {
+      max-width: 1200px;
+      width: 94%;
+      margin: 0 auto 60px;
+      position: relative;
+      z-index: 2;
+      flex-grow: 1;
+    }
+
+    .section-tab-pane {
+      display: none;
+      animation: fadeInZoom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .section-tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeInZoom {
+      from { opacity: 0; transform: translateY(12px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .lessons-deck {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .cyber-lesson-card {
+      background: linear-gradient(145deg, rgba(16, 25, 46, 0.8), rgba(9, 14, 28, 0.9));
+      border: 1px solid var(--border-glass);
+      border-radius: 28px;
+      padding: 32px 36px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.6);
+      transition: all 0.35s ease;
+    }
+
+    .cyber-lesson-card:hover {
+      border-color: rgba(96, 165, 250, 0.35);
+      transform: translateY(-3px);
+      box-shadow: 0 25px 55px -15px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-glow-edge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 6px;
+    }
+
+    .cyber-lesson-card.theme-1 .card-glow-edge { background: linear-gradient(180deg, #38bdf8, #2563eb); }
+    .cyber-lesson-card.theme-2 .card-glow-edge { background: linear-gradient(180deg, #c084fc, #7c3aed); }
+    .cyber-lesson-card.theme-3 .card-glow-edge { background: linear-gradient(180deg, #34d399, #059669); }
+    .cyber-lesson-card.theme-4 .card-glow-edge { background: linear-gradient(180deg, #fbbf24, #d97706); }
+
+    .lesson-title-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 26px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .lesson-headline {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .lesson-badge-orb {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .theme-1 .lesson-badge-orb { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .theme-2 .lesson-badge-orb { background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.3); }
+    .theme-3 .lesson-badge-orb { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }
+    .theme-4 .lesson-badge-orb { background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+
+    .lesson-headline h2 {
+      font-size: 1.65rem;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+
+    .lesson-headline p {
       font-size: 0.95rem;
-      border-right: 4px solid var(--primary-light);
-      color: #93c5fd;
-      margin-top: 10px;
+      color: var(--text-muted);
       font-weight: 600;
     }
 
-    .golden-note {
-      background: rgba(245, 158, 11, 0.1);
-      border: 1px solid rgba(245, 158, 11, 0.25);
-      border-radius: 10px;
-      padding: 12px 18px;
-      font-weight: 700;
-      color: #fde68a;
+    .btn-launch-quiz {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(29, 78, 216, 0.9));
+      color: #ffffff;
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      padding: 12px 24px;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.35);
+      transition: all 0.25s ease;
+    }
+
+    .btn-launch-quiz:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 28px rgba(37, 99, 235, 0.55);
+    }
+
+    .knowledge-tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .knowledge-tile {
+      background: rgba(10, 15, 28, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+
+    .knowledge-tile:hover {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .tile-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    /* تنسيق جدول علامات الإعراب */
-    .table-container {
-      overflow-x: auto;
-      margin-top: 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
+    .theme-1 .tile-title { color: #38bdf8; }
+    .theme-2 .tile-title { color: #c084fc; }
+    .theme-3 .tile-title { color: #34d399; }
+    .theme-4 .tile-title { color: #fbbf24; }
+
+    .tile-desc {
+      font-size: 1.02rem;
+      color: #cbd5e1;
+      line-height: 1.65;
+      margin-bottom: 14px;
     }
 
-    .marks-table {
+    .tile-highlight-code {
+      background: rgba(2, 6, 23, 0.85);
+      border-right: 4px solid #38bdf8;
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: #f1f5f9;
+      font-weight: 700;
+      font-size: 0.96rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-2 .tile-highlight-code { border-right-color: #c084fc; }
+    .theme-3 .tile-highlight-code { border-right-color: #34d399; }
+    .theme-4 .tile-highlight-code { border-right-color: #fbbf24; }
+
+    .key-golden-rule {
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.04));
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 14px 20px;
+      border-radius: 14px;
+      font-weight: 800;
+      color: #fef08a;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.05rem;
+    }
+
+    /* Cyber Table styling for Grammatical markers */
+    .cyber-table-wrap {
+      overflow-x: auto;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 10px;
+    }
+
+    .cyber-table {
       width: 100%;
       border-collapse: collapse;
       text-align: right;
     }
 
-    .marks-table th, .marks-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
+    .cyber-table th {
+      background: rgba(23, 37, 84, 0.7);
+      color: #93c5fd;
+      padding: 16px 20px;
+      font-weight: 900;
+      border-bottom: 2px solid rgba(59, 130, 246, 0.3);
     }
 
-    .marks-table th {
-      background: rgba(30, 41, 59, 0.8);
-      color: #60a5fa;
-      font-weight: 800;
+    .cyber-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e2e8f0;
+      font-size: 1rem;
     }
 
-    .marks-table tr:hover {
-      background: rgba(255, 255, 255, 0.02);
+    .cyber-table tr:hover {
+      background: rgba(255, 255, 255, 0.03);
     }
 
-    /* واجهة الاختبار التفاعلي والفلترة */
-    .quiz-card-wrapper {
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 22px;
-      padding: 32px 36px;
-      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+    .quiz-hub-card {
+      background: linear-gradient(145deg, rgba(16, 25, 46, 0.9), rgba(9, 14, 28, 0.95));
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      border-radius: 30px;
+      padding: 38px 44px;
+      box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.7);
+      position: relative;
     }
 
-    .filter-bar {
+    .quiz-filter-dock {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 26px;
-      padding-bottom: 18px;
-      border-bottom: 2px solid var(--border);
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .filter-chip {
-      background: var(--surface-card);
-      border: 1px solid var(--border);
+    .filter-pill {
+      background: rgba(10, 16, 31, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--text-muted);
-      padding: 9px 18px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
+      padding: 10px 20px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 0.98rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
 
-    .filter-chip:hover {
-      border-color: var(--primary-light);
-      color: #fff;
-    }
-
-    .filter-chip.active {
-      background: var(--primary);
-      border-color: var(--primary-light);
+    .filter-pill:hover {
+      border-color: #38bdf8;
       color: #ffffff;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      background: rgba(56, 189, 248, 0.1);
     }
 
-    .quiz-info-row {
+    .filter-pill.active {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      border-color: #60a5fa;
+      color: #ffffff;
+      box-shadow: 0 4px 18px rgba(37, 99, 235, 0.45);
+    }
+
+    /* Live Progress Bar */
+    .quiz-status-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 22px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .topic-indicator {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      padding: 6px 16px;
+      border-radius: 10px;
       font-weight: 800;
+      font-size: 0.95rem;
     }
 
-    .badge-topic {
-      background: rgba(59, 130, 246, 0.15);
-      color: #60a5fa;
-      padding: 6px 14px;
-      border-radius: 8px;
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      font-size: 0.9rem;
-    }
-
-    .score-counter {
-      color: var(--accent-gold);
-      font-size: 1.25rem;
+    .hud-score-display {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #fbbf24;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .quiz-question-box {
-      font-size: 1.6rem;
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      box-shadow: 0 0 10px #10b981;
+      transition: width 0.35s ease;
+    }
+
+    .quiz-question-hero {
+      font-size: 1.8rem;
       font-weight: 900;
-      margin-bottom: 26px;
       color: #ffffff;
       line-height: 1.5;
+      margin-bottom: 30px;
+      min-height: 70px;
     }
 
-    .answers-grid {
+    .answers-matrix {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 22px;
+      gap: 18px;
+      margin-bottom: 24px;
     }
 
-    @media (max-width: 820px) {
-      .answers-grid { grid-template-columns: 1fr; }
+    @media (max-width: 840px) {
+      .answers-matrix { grid-template-columns: 1fr; }
     }
 
-    .answer-btn {
-      background: #0d1524;
-      border: 2px solid var(--border);
-      color: var(--text);
-      padding: 20px 22px;
-      border-radius: 16px;
-      font-size: 1.2rem;
-      font-weight: 700;
+    .answer-card-btn {
+      background: rgba(9, 14, 28, 0.7);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      padding: 22px 24px;
+      border-radius: 18px;
+      font-size: 1.25rem;
+      font-weight: 800;
       text-align: right;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 14px;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      gap: 16px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
     }
 
-    .answer-btn:hover:not(:disabled) {
-      border-color: var(--primary-light);
-      background: #17243c;
-      transform: translateY(-2px);
+    .answer-card-btn:hover:not(:disabled) {
+      background: rgba(24, 38, 72, 0.85);
+      border-color: #38bdf8;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.25);
     }
 
-    .answer-btn.correct {
-      background: rgba(16, 185, 129, 0.22) !important;
-      border-color: var(--emerald) !important;
+    .answer-card-btn.correct-glow {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: #10b981 !important;
       color: #a7f3d0 !important;
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.5) !important;
     }
 
-    .answer-btn.wrong {
-      background: rgba(239, 68, 68, 0.22) !important;
-      border-color: var(--rose) !important;
+    .answer-card-btn.wrong-glow {
+      background: rgba(244, 63, 94, 0.25) !important;
+      border-color: #f43f5e !important;
       color: #fecdd3 !important;
+      box-shadow: 0 0 25px rgba(244, 63, 94, 0.4) !important;
     }
 
-    .feedback-panel {
-      padding: 18px 22px;
-      border-radius: 14px;
-      font-weight: 700;
-      font-size: 1.15rem;
-      margin-top: 14px;
+    .feedback-capsule {
+      padding: 22px 26px;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-top: 20px;
       display: none;
-      animation: viewFade 0.2s ease;
+      animation: fadeInZoom 0.25s ease;
+      line-height: 1.6;
     }
 
-    .quiz-bottom-actions {
+    .quiz-bottom-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 24px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
-    .btn-next-question {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 14px 34px;
-      border-radius: 12px;
-      font-size: 1.15rem;
-      font-weight: 800;
+    .btn-quiz-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: 1px solid #60a5fa;
+      padding: 16px 36px;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      font-weight: 900;
       cursor: pointer;
       display: none;
       align-items: center;
-      gap: 10px;
-      transition: all 0.2s;
+      gap: 12px;
+      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+      transition: all 0.25s ease;
     }
 
-    .btn-next-question:hover {
-      background: #1d4ed8;
-      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+    .btn-quiz-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.7);
     }
 
-    /* شاشة النتيجة النهائية */
-    .finish-screen {
+    /* Result Celebration Trophy Screen */
+    .celebration-screen {
       text-align: center;
-      padding: 40px 16px;
+      padding: 50px 20px;
     }
 
-    .finish-screen i.trophy {
-      font-size: 5rem;
-      color: var(--accent-gold);
-      margin-bottom: 20px;
-      animation: bounce 1s infinite alternate;
+    .trophy-glow-icon {
+      font-size: 6rem;
+      color: #fbbf24;
+      filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.7));
+      margin-bottom: 24px;
+      animation: floatTrophy 2s infinite ease-in-out;
     }
 
-    @keyframes bounce {
-      from { transform: translateY(0); }
-      to { transform: translateY(-10px); }
+    @keyframes floatTrophy {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
     }
   </style>
 </head>
 <body>
 
-  <header class="top-toolbar">
-    <div class="brand-logo">
-      <i class="fa-solid fa-graduation-cap"></i>
-      <span>منصة الكفايات اللغوية (1)</span>
-    </div>
-    <div class="toolbar-actions">
-      <button class="tool-btn" id="sound-btn" onclick="toggleSound()">
-        <i class="fa-solid fa-volume-high"></i> <span id="sound-label">الأصوات: مفعلة</span>
+  <!-- Ambient Light Orbs -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+  <div class="bg-grid-overlay"></div>
+
+  <header class="nav-bar-container">
+    <a href="#" class="brand-mark">
+      <div class="brand-icon-box">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div class="brand-text-block">
+        <h1>منصة الكفايات اللغوية (1) <span style="font-size: 0.8rem; background: #2563eb; color: #fff; padding: 2px 8px; border-radius: 6px;">V3.0 Pro</span></h1>
+        <p>الوحدة الأولى: الجملة العربية الأساسية</p>
+      </div>
+    </a>
+
+    <div class="hud-controls">
+      <button class="hud-btn" id="sound-toggle-btn" onclick="toggleAppSound()">
+        <i class="fa-solid fa-volume-high"></i> <span id="sound-state-text">الصوت: نشط</span>
       </button>
-      <button class="tool-btn" onclick="toggleZoom()">
-        <i class="fa-solid fa-text-height"></i> تكبير الخط للبروجكتر
+      <button class="hud-btn" id="projector-btn" onclick="toggleProjectorMode()">
+        <i class="fa-solid fa-lightbulb"></i> وضع البروجكتر
       </button>
-      <button class="tool-btn" onclick="toggleFullScreen()">
+      <button class="hud-btn" onclick="toggleFullScreenMode()">
         <i class="fa-solid fa-expand"></i> ملء الشاشة
       </button>
     </div>
   </header>
 
-  <div class="hero-header">
-    <div class="hero-badge">
-      <i class="fa-solid fa-school"></i>
-      <div class="details">
-        <span>المدرسة</span>
-        <strong>ثانوية الأمير عبدالمحسن</strong>
+  <section class="hero-container">
+    <div class="hero-master-card glass-panel">
+      
+      <div class="hero-header-line">
+        <div class="hero-tag">
+          <span class="hero-tag-pulse"></span>
+          <span>منظومة العرض التفاعلي الصفي</span>
+        </div>
+        <div style="font-size: 0.95rem; color: #94a3b8; font-weight: 700;">
+          <i class="fa-solid fa-circle-check" style="color: #10b981; margin-left: 6px;"></i> مجهزة خصيصاً للشاشات وقاعات البروجكتر
+        </div>
       </div>
-    </div>
-    <div class="hero-badge">
-      <i class="fa-solid fa-chalkboard-user"></i>
-      <div class="details">
-        <span>إشراف الأستاذ القدير</span>
-        <strong>محمد تركي</strong>
-      </div>
-    </div>
-    <div class="hero-badge">
-      <i class="fa-solid fa-user-graduate"></i>
-      <div class="details">
-        <span>إعداد وتقديم</span>
-        <strong>الطالب المتميز</strong>
-      </div>
-    </div>
-  </div>
 
-  <nav class="tabs-nav">
-    <button class="tab-switch active" onclick="switchMainTab('summary')">
-      <i class="fa-solid fa-book-open"></i> ملخص الدروس (الوحدة الأولى)
-    </button>
-    <button class="tab-switch" onclick="switchMainTab('quiz')">
-      <i class="fa-solid fa-list-check"></i> بنك الأسئلة والمسابقة (40 سؤالاً)
-    </button>
-  </nav>
-
-  <main class="main-wrap">
-    
-    <!-- قسم ملخص دروس الوحدة الأولى الأربعة -->
-    <section id="summary-view" class="view-section active">
-      <div class="summary-stack">
+      <div class="hero-cards-grid">
         
-        <!-- الدرس 1: الجملة الاسمية ونواسخها -->
-        <article class="lesson-box theme-blue">
-          <div class="lesson-head">
-            <div class="lesson-title-group">
-              <div class="lesson-avatar"><i class="fa-solid fa-diagram-project"></i></div>
+        <!-- School Card -->
+        <div class="cyber-id-card school-card">
+          <div class="id-card-icon">
+            <i class="fa-solid fa-school"></i>
+          </div>
+          <div class="id-card-info">
+            <span>الصرح التعليمي</span>
+            <strong>ثانوية الأمير عبدالمحسن</strong>
+          </div>
+        </div>
+
+        <!-- Teacher Card -->
+        <div class="cyber-id-card teacher-card">
+          <div class="id-card-icon">
+            <i class="fa-solid fa-chalkboard-user"></i>
+          </div>
+          <div class="id-card-info">
+            <span>إشراف الأستاذ القدير</span>
+            <strong>محمد تركي</strong>
+          </div>
+        </div>
+
+        <!-- Student Card -->
+        <div class="cyber-id-card student-card">
+          <div class="id-card-icon">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <div class="id-card-info">
+            <span>إعداد وتقديم</span>
+            <strong>الطالب المتميز</strong>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section class="tabs-wrapper">
+    <nav class="neon-tabs-bar">
+      <button class="tab-trigger active" id="tab-btn-summary" onclick="switchActiveView('summary')">
+        <i class="fa-solid fa-book-sparkles"></i>
+        <span>ملخص الدروس</span>
+        <span class="tab-badge">4 دروس</span>
+      </button>
+      <button class="tab-trigger" id="tab-btn-quiz" onclick="switchActiveView('quiz')">
+        <i class="fa-solid fa-gamepad"></i>
+        <span>المسابقة والتحديات</span>
+        <span class="tab-badge">40 سؤالاً</span>
+      </button>
+    </nav>
+  </section>
+
+  <main class="app-main">
+
+    <!-- View 1: Lessons Summary Cards -->
+    <section id="pane-summary" class="section-tab-pane active">
+      <div class="lessons-deck">
+
+        <!-- Lesson 1: الجملة الاسمية ونواسخها -->
+        <article class="cyber-lesson-card theme-1">
+          <div class="card-glow-edge"></div>
+          
+          <div class="lesson-title-area">
+            <div class="lesson-headline">
+              <div class="lesson-badge-orb"><i class="fa-solid fa-diagram-project"></i></div>
               <div>
                 <h2>1. الجملة الاسمية ونواسخها</h2>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">مكونات الجملة الاسمية المجردة وحالات دخول كان وإنّ</p>
+                <p>المجردة (مبتدأ وخبر) • الأفعال الناسخة (كان) • الحروف الناسخة (إنّ)</p>
               </div>
             </div>
-            <button class="btn-quick-quiz" onclick="startQuizWithTopic(1)">
-              <i class="fa-solid fa-play"></i> أسئلة هذا الدرس (10)
+            <button class="btn-launch-quiz" onclick="triggerDirectQuiz(1)">
+              <span>بدء اختبار هذا الدرس (10 أسئلة)</span>
+              <i class="fa-solid fa-arrow-left"></i>
             </button>
           </div>
-          <div class="concepts-grid">
-            <div class="concept-item">
-              <h3><i class="fa-solid fa-circle-check"></i> الجملة الاسمية المجردة</h3>
-              <p>تتألف من ركنين أساسيين مرفوعين: <strong>المبتدأ</strong> و <strong>الخبر</strong>.</p>
-              <div class="example-tag">مثال: الطالبُ مجتهدٌ (مبتدأ وخبر مرفوعان بالضمة)</div>
+
+          <div class="knowledge-tiles-grid">
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> الجملة الاسمية المجردة</div>
+                <div class="tile-desc">تتكون من ركنين أساسيين مرفوعين دائماً هما <strong>المبتدأ</strong> و<strong>الخبر</strong>.</div>
+              </div>
+              <div class="tile-highlight-code">مثال: الطالبُ مجتهدٌ (مبتدأ وخبر مرفوعان بالضمة)</div>
             </div>
-            <div class="concept-item">
-              <h3><i class="fa-solid fa-circle-check"></i> الأفعال الناسخة (كان وأخواتها)</h3>
-              <p>أفعال ناقصة تدخل على الجملة الاسمية فـ <strong>ترفع المبتدأ</strong> ويسمى اسمها، و <strong>تنصب الخبر</strong> ويسمى خبرها.</p>
-              <div class="example-tag">مثال: كان الطالبُ مجتهداً (اسم كان مرفوع، وخبرها منصوب)</div>
+
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> الأفعال الناسخة (كان وأخواتها)</div>
+                <div class="tile-desc">أفعال ناقصة تدخل على الجملة الاسمية فـ <strong>ترفع المبتدأ</strong> اسماً لها و<strong>تنصب الخبر</strong> خبراً لها.</div>
+              </div>
+              <div class="tile-highlight-code">مثال: كان الطالبُ مجتهداً (اسمها مرفوع، خبرها منصوب)</div>
             </div>
-            <div class="concept-item">
-              <h3><i class="fa-solid fa-circle-check"></i> الحروف الناسخة (إنّ وأخواتها)</h3>
-              <p>حروف مشبهة بالفعل تدخل على الجملة فـ <strong>تنصب المبتدأ</strong> ويسمى اسمها، و <strong>ترفع الخبر</strong> ويسمى خبرها.</p>
-              <div class="example-tag">مثال: إنّ الطالبَ مجتهدٌ (اسم إن منصوب، وخبرها مرفوع)</div>
+
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> الحروف الناسخة (إنّ وأخواتها)</div>
+                <div class="tile-desc">حروف ناسخة تدخل على الجملة الاسمية فـ <strong>تنصب المبتدأ</strong> اسماً لها و<strong>ترفع الخبر</strong> خبراً لها.</div>
+              </div>
+              <div class="tile-highlight-code">مثال: إنّ الطالبَ مجتهدٌ (اسمها منصوب، خبرها مرفوع)</div>
             </div>
           </div>
-          <div class="golden-note">
-            💡 قاعدة ذهبية: (كان) ترفع ثم تنصب، بينما (إنّ) تنصب ثم ترفع!
+
+          <div class="key-golden-rule">
+            <i class="fa-solid fa-bolt" style="color: #fbbf24; font-size: 1.3rem;"></i>
+            <span>الخلاصة المضيئة: (كان) ترفع ثم تنصب، بينما (إنّ) تنصب ثم ترفع!</span>
           </div>
         </article>
 
-        <!-- الدرس 2: إعراب الفعل المضارع -->
-        <article class="lesson-box theme-purple">
-          <div class="lesson-head">
-            <div class="lesson-title-group">
-              <div class="lesson-avatar"><i class="fa-solid fa-pen-fancy"></i></div>
+        <!-- Lesson 2: إعراب الفعل المضارع -->
+        <article class="cyber-lesson-card theme-2">
+          <div class="card-glow-edge"></div>
+
+          <div class="lesson-title-area">
+            <div class="lesson-headline">
+              <div class="lesson-badge-orb"><i class="fa-solid fa-pen-nib"></i></div>
               <div>
                 <h2>2. إعراب الفعل المضارع</h2>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">حالات الرفع، النصب، والجزم بالأدوات والعلامات</p>
+                <p>حالات الرفع، النصب، والجزم بالأدوات والعلامات الأصلية والفرعية</p>
               </div>
             </div>
-            <button class="btn-quick-quiz" onclick="startQuizWithTopic(2)">
-              <i class="fa-solid fa-play"></i> أسئلة هذا الدرس (10)
+            <button class="btn-launch-quiz" onclick="triggerDirectQuiz(2)">
+              <span>بدء اختبار هذا الدرس (10 أسئلة)</span>
+              <i class="fa-solid fa-arrow-left"></i>
             </button>
           </div>
-          <div class="concepts-grid">
-            <div class="concept-item">
-              <h3><i class="fa-solid fa-circle-check"></i> حالة الرفع (الأصل)</h3>
-              <p>يُرفع الفعل المضارع إذا تجرد من أدوات النصب والجزم بالضمة الظاهرة أو المقدرة، أو بثبوت النون في الأفعال الخمسة.</p>
-              <div class="example-tag">مثال: يذاكرُ الطالبُ بجدٍ / الطلابُ يذاكرونَ</div>
+
+          <div class="knowledge-tiles-grid">
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> حالة الرفع (الأصل)</div>
+                <div class="tile-desc">يُرفع إذا لم يُسبق بناصب أو جازم، بالضمة (الظاهرة أو المقدرة)، أو بثبوت النون في الأفعال الخمسة.</div>
+              </div>
+              <div class="tile-highlight-code">مثال: يكتبُ الطالبُ الدرسَ / يكتبونَ</div>
             </div>
-            <div class="concept-item">
-              <h3><i class="fa-solid fa-circle-check"></i> حالة النصب</h3>
-              <p>يُنصب إذا سُبق بأحد حروف النصب: <strong>(أنْ، لَنْ، كَيْ، حتّى، لام التعليل)</strong>، بالفتحة أو بحذف النون.</p>
-              <div class="example-tag">مثال: لن يُهملَ الطالبُ / لن يُهملوا</div>
+
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> حالة النصب</div>
+                <div class="tile-desc">إذا سُبق بأداة نصب: <strong>(أنْ، لَنْ، كَيْ، حتّى، لام التعليل)</strong> بالفتحة أو بحذف النون للأفعال الـ5.</div>
+              </div>
+              <div class="tile-highlight-code">مثال: لن يُهملَ الطالبُ / لن يُهملوا</div>
             </div>
-            <div class="concept-item">
-              <h3><i class="fa-solid fa-circle-check"></i> حالة الجزم</h3>
-              <p>يُجزم إذا سُبق بحروف الجزم: <strong>(لَمْ، لا الناهية، لام الأمر، لمّا)</strong> بالسكون، أو بحذف حرف العلة، أو بحذف النون.</p>
-              <div class="example-tag">مثال: لم يحضرْ / لا تدعُ غير الله / لم يحضروا</div>
+
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> حالة الجزم</div>
+                <div class="tile-desc">إذا سُبق بأداة جزم: <strong>(لَمْ، لا الناهية، لام الأمر، لمّا)</strong> بالسكون، أو حذف العلة، أو حذف النون.</div>
+              </div>
+              <div class="tile-highlight-code">مثال: لم يحضرْ / لا تدعُ غير الله / لم يحضروا</div>
             </div>
           </div>
-          <div class="golden-note">
-            💡 قاعدة ذهبية: الأفعال الخمسة تُرفع بثبوت النون، وتُنصب وتُجزم بحذفها!
+
+          <div class="key-golden-rule">
+            <i class="fa-solid fa-bolt" style="color: #fbbf24; font-size: 1.3rem;"></i>
+            <span>الخلاصة المضيئة: الأفعال الخمسة ترفع بثبوت النون، وتُنصب وتُجزم بحذفها!</span>
           </div>
         </article>
 
-        <!-- الدرس 3: الفاعل ونائب الفاعل -->
-        <article class="lesson-box theme-emerald">
-          <div class="lesson-head">
-            <div class="lesson-title-group">
-              <div class="lesson-avatar"><i class="fa-solid fa-scale-balanced"></i></div>
+        <!-- Lesson 3: الفاعل ونائب الفاعل -->
+        <article class="cyber-lesson-card theme-3">
+          <div class="card-glow-edge"></div>
+
+          <div class="lesson-title-area">
+            <div class="lesson-headline">
+              <div class="lesson-badge-orb"><i class="fa-solid fa-scale-balanced"></i></div>
               <div>
                 <h2>3. الفاعل ونائب الفاعل</h2>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">الجملة الفعلية، المبني للمعلوم والمبني للمجهول</p>
+                <p>الجملة الفعلية، صيغ المبني للمجهول، وحكم نائب الفاعل المرفوع</p>
               </div>
             </div>
-            <button class="btn-quick-quiz" onclick="startQuizWithTopic(3)">
-              <i class="fa-solid fa-play"></i> أسئلة هذا الدرس (10)
+            <button class="btn-launch-quiz" onclick="triggerDirectQuiz(3)">
+              <span>بدء اختبار هذا الدرس (10 أسئلة)</span>
+              <i class="fa-solid fa-arrow-left"></i>
             </button>
           </div>
-          <div class="concepts-grid">
-            <div class="concept-item">
-              <h3><i class="fa-solid fa-circle-check"></i> الفاعل (المبني للمعلوم)</h3>
-              <p>اسم مرفوع يقع بعد فعل مبني للمعلوم ويدل على من قام بالفعل أو اتصف به، وحكمه الإعرابي <strong>الرفع دائماً</strong>.</p>
-              <div class="example-tag">مثال: شَرَحَ المعلّمُ المسألةَ (المعلّمُ: فاعل مرفوع بالضمة)</div>
+
+          <div class="knowledge-tiles-grid">
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> الفاعل (المبني للمعلوم)</div>
+                <div class="tile-desc">اسم مرفوع يدل على من قام بالفعل أو اتصف به، ويكون بعد فعل مبني للمعلوم وحكمه الرفع دائماً.</div>
+              </div>
+              <div class="tile-highlight-code">مثال: حَفِظَ الطالبُ القصيدةَ (الطالبُ: فاعل مرفوع)</div>
             </div>
-            <div class="concept-item">
-              <h3><i class="fa-solid fa-circle-check"></i> صياغة المبني للمجهول</h3>
-              <p><strong>في الماضي:</strong> يُضمّ أوله ويُكسر ما قبل آخره (كَتَبَ ⬅ كُتِبَ).<br><strong>في المضارع:</strong> يُضمّ أوله ويُفتح ما قبل آخره (يَكْتُبُ ⬅ يُكْتَبُ).</p>
-              <div class="example-tag">مثال: كُتِبَ الدرسُ / يُكْتَبُ الدرسُ</div>
+
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> صياغة المبني للمجهول</div>
+                <div class="tile-desc">
+                  <strong>الماضي:</strong> يُضم أوله ويُكسر ما قبل آخره (كَتَبَ ⬅ كُتِبَ).<br>
+                  <strong>المضارع:</strong> يُضم أوله ويُفتح ما قبل آخره (يَكْتُبُ ⬅ يُكْتَبُ).
+                </div>
+              </div>
+              <div class="tile-highlight-code">مثال: شُرِبَ الحليبُ / يُشْرَبُ الحليبُ</div>
             </div>
-            <div class="concept-item">
-              <h3><i class="fa-solid fa-circle-check"></i> نائب الفاعل</h3>
-              <p>اسم مرفوع يحل محل الفاعل بعد حذفه في الجملة المبنية للمجهول ويأخذ كافة أحكامه الإعرابية من رفع وعلامات.</p>
-              <div class="example-tag">مثال: شُرِحَتِ المسألةُ (المسألةُ: نائب فاعل مرفوع بالضمة)</div>
+
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> نائب الفاعل</div>
+                <div class="tile-desc">اسم مرفوع يحل محل الفاعل بعد حذفه في الجملة المبنية للمجهول، ويتحول المفعول به لنائب فاعل مرفوع.</div>
+              </div>
+              <div class="tile-highlight-code">مثال: كُتِبَ الدرسُ (الدرسُ: نائب فاعل مرفوع بالضمة)</div>
             </div>
+          </div>
+
+          <div class="key-golden-rule">
+            <i class="fa-solid fa-bolt" style="color: #fbbf24; font-size: 1.3rem;"></i>
+            <span>الخلاصة المضيئة: عند بناء الجملة للمجهول نحذف الفاعل، وينوب المفعول به عنه فيصبح مرفوعاً!</span>
           </div>
         </article>
 
-        <!-- الدرس 4: علامات الإعراب الأصلية والفرعية -->
-        <article class="lesson-box theme-gold">
-          <div class="lesson-head">
-            <div class="lesson-title-group">
-              <div class="lesson-avatar"><i class="fa-solid fa-table-list"></i></div>
+        <!-- Lesson 4: جدول علامات الإعراب -->
+        <article class="cyber-lesson-card theme-4">
+          <div class="card-glow-edge"></div>
+
+          <div class="lesson-title-area">
+            <div class="lesson-headline">
+              <div class="lesson-badge-orb"><i class="fa-solid fa-table-list"></i></div>
               <div>
-                <h2>4. علامات الإعراب الأصلية والفرعية</h2>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">جدول الحركات والحروف في الأسماء والأفعال</p>
+                <h2>4. جدول علامات الإعراب الأصلية والفرعية</h2>
+                <p>مرجع الحركات الأصلية والحروف والنيابة في الأسماء والأفعال</p>
               </div>
             </div>
-            <button class="btn-quick-quiz" onclick="startQuizWithTopic(4)">
-              <i class="fa-solid fa-play"></i> أسئلة هذا الدرس (10)
+            <button class="btn-launch-quiz" onclick="triggerDirectQuiz(4)">
+              <span>بدء اختبار هذا الدرس (10 أسئلة)</span>
+              <i class="fa-solid fa-arrow-left"></i>
             </button>
           </div>
-          <div class="table-container">
-            <table class="marks-table">
+
+          <div class="cyber-table-wrap">
+            <table class="cyber-table">
               <thead>
                 <tr>
-                  <th>الحالة الإعرابية</th>
+                  <th>الحالة</th>
                   <th>العلامة الأصلية</th>
-                  <th>العلامات الفرعية البديلة</th>
-                  <th>المواضع</th>
+                  <th>العلامات الفرعية</th>
+                  <th>أهم المواضع والأمثلة</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>الرفع</strong></td>
+                  <td><strong style="color: #60a5fa;">الرفع</strong></td>
                   <td>الضمة (ـُ)</td>
                   <td>الألف / الواو / ثبوت النون</td>
-                  <td>المثنى (الألف)، جمع المذكر والأسماء الـ5 (الواو)، الأفعال الـ5 (ثبوت النون).</td>
+                  <td>المثنى (الألف)، جمع المذكر والأسماء الخمسة (الواو)، الأفعال الخمسة (ثبوت النون).</td>
                 </tr>
                 <tr>
-                  <td><strong>النصب</strong></td>
+                  <td><strong style="color: #34d399;">النصب</strong></td>
                   <td>الفتحة (ـَ)</td>
                   <td>الياء / الكسرة / الألف / حذف النون</td>
-                  <td>المثنى وجمع المذكر (الياء)، جمع المؤنث (الكسرة)، الأسماء الـ5 (الألف)، الأفعال الـ5 (حذف النون).</td>
+                  <td>المثنى والجمع (الياء)، جمع المؤنث السالم (الكسرة)، الأسماء الـ5 (الألف)، الأفعال الـ5 (حذف النون).</td>
                 </tr>
                 <tr>
-                  <td><strong>الجر (للأسماء)</strong></td>
+                  <td><strong style="color: #c084fc;">الجر</strong></td>
                   <td>الكسرة (ـِ)</td>
                   <td>الياء / الفتحة</td>
-                  <td>المثنى والجمع والأسماء الـ5 (الياء)، الممنوع من الصرف (الفتحة).</td>
+                  <td>المثنى والجمع والأسماء الخمسة (الياء)، الممنوع من الصرف (الفتحة).</td>
                 </tr>
                 <tr>
-                  <td><strong>الجزم (للأفعال)</strong></td>
+                  <td><strong style="color: #fbbf24;">الجزم</strong></td>
                   <td>السكون (ـْ)</td>
                   <td>حذف حرف العلة / حذف النون</td>
-                  <td>المعتل الآخر (حذف العلة)، الأفعال الخمسة (حذف النون).</td>
+                  <td>الفعل معتل الآخر (حذف العلة)، الأفعال الخمسة (حذف النون).</td>
                 </tr>
               </tbody>
             </table>
@@ -797,68 +1205,73 @@
       </div>
     </section>
 
-    <section id="quiz-view" class="view-section">
-      <div class="quiz-card-wrapper">
+    <!-- View 2: Futuristic Interactive Quiz System -->
+    <section id="pane-quiz" class="section-tab-pane">
+      <div class="quiz-hub-card glass-panel">
         
-        <!-- أزرار الفلترة لاختيار الدرس المراد اختباره -->
-        <div class="filter-bar">
-          <span style="align-self: center; font-weight: 800; color: #cbd5e1; margin-left: 6px;">اختر موضوع الاختبار:</span>
-          <button class="filter-chip active" onclick="setQuizFilter('all')">
-            <i class="fa-solid fa-globe"></i> جميع الدروس (40 سؤالاً)
+        <!-- Filter Tabs -->
+        <div class="quiz-filter-dock">
+          <button class="filter-pill active" onclick="applyQuizFilter('all')">
+            <i class="fa-solid fa-layer-group"></i> جميع الدروس (40 سؤالاً)
           </button>
-          <button class="filter-chip" onclick="setQuizFilter(1)">
+          <button class="filter-pill" onclick="applyQuizFilter(1)">
             <i class="fa-solid fa-diagram-project"></i> 1. الجملة الاسمية (10)
           </button>
-          <button class="filter-chip" onclick="setQuizFilter(2)">
-            <i class="fa-solid fa-pen-fancy"></i> 2. الفعل المضارع (10)
+          <button class="filter-pill" onclick="applyQuizFilter(2)">
+            <i class="fa-solid fa-pen-nib"></i> 2. الفعل المضارع (10)
           </button>
-          <button class="filter-chip" onclick="setQuizFilter(3)">
+          <button class="filter-pill" onclick="applyQuizFilter(3)">
             <i class="fa-solid fa-scale-balanced"></i> 3. الفاعل ونائبه (10)
           </button>
-          <button class="filter-chip" onclick="setQuizFilter(4)">
+          <button class="filter-pill" onclick="applyQuizFilter(4)">
             <i class="fa-solid fa-table-list"></i> 4. علامات الإعراب (10)
           </button>
         </div>
 
-        <div id="quiz-active-area">
-          <div class="quiz-info-row">
+        <!-- Quiz Dynamic Area -->
+        <div id="quiz-live-box">
+          <div class="quiz-status-meta">
             <div>
-              <span class="badge-topic" id="current-topic-label">الموضوع: الجملة الاسمية</span>
-              <span style="margin-right: 12px; font-size: 1.1rem; color: #fff;" id="quiz-progress-text">السؤال 1 من 40</span>
+              <span class="topic-indicator" id="quiz-topic-badge">الموضوع: الجملة الاسمية</span>
+              <span style="margin-right: 14px; font-weight: 800; color: #fff;" id="quiz-step-label">السؤال 1 من 40</span>
             </div>
-            <div class="score-counter">
-              <i class="fa-solid fa-star"></i>
-              <span>النقاط: <strong id="score-display">0</strong></span>
+            <div class="hud-score-display">
+              <i class="fa-solid fa-gem"></i>
+              <span>النقاط: <strong id="hud-score-number" style="color: #fff;">0</strong></span>
             </div>
           </div>
 
-          <div class="quiz-question-box" id="quiz-question-title">
-            جاري تحميل السؤال...
+          <div class="progress-track">
+            <div class="progress-fill" id="quiz-progress-bar"></div>
           </div>
 
-          <div class="answers-grid" id="answers-container">
-            <!-- تتولد الخيارات ديناميكياً هنا -->
+          <div class="quiz-question-hero" id="quiz-question-header">
+            جاري تحميل التحدي اللغوي...
           </div>
 
-          <div class="feedback-panel" id="feedback-box"></div>
+          <div class="answers-matrix" id="quiz-options-grid"></div>
 
-          <div class="quiz-bottom-actions">
-            <button class="btn-quick-quiz" onclick="restartCurrentQuiz()">
-              <i class="fa-solid fa-arrow-rotate-right"></i> إعادة من البداية
+          <div class="feedback-capsule" id="quiz-feedback-banner"></div>
+
+          <div class="quiz-bottom-nav">
+            <button class="hud-btn" onclick="resetActiveQuiz()">
+              <i class="fa-solid fa-arrow-rotate-right"></i> إعادة الاختبار
             </button>
-            <button class="btn-next-question" id="next-btn" onclick="goToNextQuestion()">
-              <span>السؤال التالي</span> <i class="fa-solid fa-arrow-left"></i>
+            <button class="btn-quiz-primary" id="btn-next-step" onclick="proceedNextQuestion()">
+              <span>السؤال التالي</span>
+              <i class="fa-solid fa-arrow-left"></i>
             </button>
           </div>
         </div>
 
-        <div id="quiz-result-area" class="finish-screen" style="display: none;">
-          <i class="fa-solid fa-trophy trophy"></i>
-          <h2 style="font-size: 2.3rem; font-weight: 900; margin-bottom: 12px; color: #ffffff;">أحسنت يا بطل! اكتمل الاختبار بنجاح</h2>
-          <p style="font-size: 1.35rem; color: var(--text-muted); margin-bottom: 14px;" id="result-summary-text"></p>
-          <div style="font-size: 2.2rem; font-weight: 900; color: #60a5fa; margin-bottom: 26px;" id="result-percentage">100%</div>
-          <button class="tool-btn" style="padding: 14px 36px; font-size: 1.15rem; margin: 0 auto;" onclick="restartCurrentQuiz()">
-            <i class="fa-solid fa-rotate-right"></i> إعادة خوض الاختبار
+        <!-- Finish Trophy Screen -->
+        <div id="quiz-finish-box" class="celebration-screen" style="display: none;">
+          <i class="fa-solid fa-trophy trophy-glow-icon"></i>
+          <h2 style="font-size: 2.5rem; font-weight: 1000; margin-bottom: 12px;">مستوى استثنائي! أحسنت يا بطل</h2>
+          <p style="font-size: 1.3rem; color: var(--text-muted); margin-bottom: 20px;" id="finish-stats-msg"></p>
+          <div style="font-size: 3rem; font-weight: 1000; color: #38bdf8; margin-bottom: 30px;" id="finish-percentage-num">100%</div>
+          <button class="btn-launch-quiz" style="margin: 0 auto; font-size: 1.2rem; padding: 14px 40px;" onclick="resetActiveQuiz()">
+            <i class="fa-solid fa-rotate-right"></i> خوض التحدي من جديد
           </button>
         </div>
 
@@ -868,699 +1281,61 @@
   </main>
 
   <script>
-    // مولد المؤثرات الصوتية عبر Web Audio API
-    let soundEnabled = true;
-    let audioCtx = null;
+    // Synth Audio Engine via Web Audio API (zero external sound dependencies)
+    let isSoundMuted = false;
+    let audioContext = null;
 
-    function playTone(freq, type, duration) {
-      if (!soundEnabled) return;
+    function playAudioTone(freq, type, duration, gainLevel = 0.1) {
+      if (isSoundMuted) return;
       try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+        if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
         osc.type = type;
         osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        gain.gain.setValueAtTime(gainLevel, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
+        gain.connect(audioContext.destination);
         osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-      } catch (e) {
-        console.error("Audio error", e);
+        osc.stop(audioContext.currentTime + duration);
+      } catch (err) {
+        console.warn("Audio exception:", err);
       }
     }
 
-    function playSuccessSound() {
-      playTone(523.25, 'sine', 0.12);
-      setTimeout(() => playTone(659.25, 'sine', 0.15), 100);
-      setTimeout(() => playTone(783.99, 'sine', 0.3), 200);
+    function soundSuccess() {
+      playAudioTone(523.25, 'sine', 0.12, 0.15); // C5
+      setTimeout(() => playAudioTone(659.25, 'sine', 0.14, 0.15), 90); // E5
+      setTimeout(() => playAudioTone(783.99, 'sine', 0.28, 0.2), 180); // G5
     }
 
-    function playErrorSound() {
-      playTone(260, 'sawtooth', 0.18);
-      setTimeout(() => playTone(200, 'sawtooth', 0.25), 120);
+    function soundError() {
+      playAudioTone(250, 'sawtooth', 0.18, 0.12);
+      setTimeout(() => playAudioTone(190, 'sawtooth', 0.25, 0.15), 110);
     }
 
-    function toggleSound() {
-      soundEnabled = !soundEnabled;
-      const label = document.getElementById('sound-label');
-      const icon = document.querySelector('#sound-btn i');
-      if (soundEnabled) {
-        label.innerText = 'الأصوات: مفعلة';
-        icon.className = 'fa-solid fa-volume-high';
-      } else {
-        label.innerText = 'الأصوات: مكتومة';
+    function toggleAppSound() {
+      isSoundMuted = !isSoundMuted;
+      const text = document.getElementById('sound-state-text');
+      const icon = document.querySelector('#sound-toggle-btn i');
+      if (isSoundMuted) {
+        text.innerText = 'الصوت: مكتوم';
         icon.className = 'fa-solid fa-volume-xmark';
-      }
-    }
-
-    // بنك الأسئلة الشامل (40 سؤالاً - 10 لكل قسم بدقة أكاديمية)
-    const questionsDB = [
-      /* =================== القسم 1: الجملة الاسمية ونواسخها (10 أسئلة) =================== */
-      {
-        topicId: 1,
-        topicName: "الجملة الاسمية ونواسخها",
-        q: "ما هو الأثر الإعرابي لدخول (كان وأخواتها) على الجملة الاسمية؟",
-        opts: [
-          "ترفع المبتدأ وتنصب الخبر",
-          "تنصب المبتدأ وترفع الخبر",
-          "تنصب المبتدأ والخبر معاً",
-          "ترفع المبتدأ والخبر معاً"
-        ],
-        ans: 0,
-        tip: "صحيح! كان وأخواتها أفعال ناسخة ترفع المبتدأ اسماً لها وتنصب الخبر خبراً لها."
-      },
-      {
-        topicId: 1,
-        topicName: "الجملة الاسمية ونواسخها",
-        q: "ما هو الأثر الإعرابي لدخول (إنّ وأخواتها) على الجملة الاسمية؟",
-        opts: [
-          "ترفع المبتدأ وتنصب الخبر",
-          "تنصب المبتدأ وترفع الخبر",
-          "تجزم المبتدأ والخبر",
-          "تبني المبتدأ على السكون"
-        ],
-        ans: 1,
-        tip: "رائع! إنّ وأخواتها حروف ناسخة تنصب المبتدأ اسماً لها وترفع الخبر خبراً لها."
-      },
-      {
-        topicId: 1,
-        topicName: "الجملة الاسمية ونواسخها",
-        q: "حدد الضبط الصحيح لجملة (كان الطالبان مجتهدين):",
-        opts: [
-          "الطالبانِ اسم كان مرفوع بالألف، ومجتهدينِ خبرها منصوب بالياء",
-          "الطالبانِ اسم كان منصوب بالياء، ومجتهدينِ خبرها مرفوع بالواو",
-          "الطالبانِ فاعل مرفوع بالضمة، ومجتهدينِ مفعول به",
-          "الطالبانِ مبتدأ مجرور، ومجتهدينِ صفة منصوبة"
-        ],
-        ans: 0,
-        tip: "أحسنت! اسم كان مرفوع وعلامة رفعه الألف لأنه مثنى، وخبرها منصوب بالياء لأنه مثنى."
-      },
-      {
-        topicId: 1,
-        topicName: "الجملة الاسمية ونواسخها",
-        q: "أيٌّ من الآتي يُعد من أخوات (كان) الناسخة؟",
-        opts: ["لعلّ", "أصبح", "كأنّ", "ليت"],
-        ans: 1,
-        tip: "صحيح! (أصبح) من الأفعال الناسخة، بينما لعل وكأن وليت من الحروف الناسخة."
-      },
-      {
-        topicId: 1,
-        topicName: "الجملة الاسمية ونواسخها",
-        q: "في جملة (لعلّ الفرجَ قريبٌ)، كلمة (الفرجَ) تُعرب:",
-        opts: [
-          "اسم لعلّ منصوب وعلامة نصبه الفتحة",
-          "خبر لعلّ مرفوع وعلامة رفعه الضمة",
-          "مبتدأ مرفوع وعلامة رفعه الضمة",
-          "مفعول به ثانٍ منصوب"
-        ],
-        ans: 0,
-        tip: "إجابة ممتازة! لعلّ حرف ناسخ ينصب المبتدأ اسماً له."
-      },
-      {
-        topicId: 1,
-        topicName: "الجملة الاسمية ونواسخها",
-        q: "عند إدخال الفعل الناسخ (صار) على جملة (الماءُ ثلجٌ) تصبح:",
-        opts: [
-          "صارَ الماءُ ثلجاً",
-          "صارَ الماءَ ثلجٌ",
-          "صارَ الماءَ ثلجاً",
-          "صارَ الماءُ ثلجٌ"
-        ],
-        ans: 0,
-        tip: "صحيح! ترفع المبتدأ (الماءُ) وتنصب الخبر (ثلجاً)."
-      },
-      {
-        topicId: 1,
-        topicName: "الجملة الاسمية ونواسخها",
-        q: "ما الحرف الناسخ الذي يفيد معنى (التمنّي) في اللغة العربية؟",
-        opts: ["كأنّ", "لكنّ", "ليتَ", "لعلّ"],
-        ans: 2,
-        tip: "صحيح! (ليت) تفيد التمني للشيء المستحيل أو عسير التحقق، بينما (لعل) تفيد الرجاء."
-      },
-      {
-        topicId: 1,
-        topicName: "الجملة الاسمية ونواسخها",
-        q: "ما هو إعراب كلمة (أخوك) في جملة (إنّ أخاك ذو فضلٍ) إذا حُذفت (إنّ)؟",
-        opts: [
-          "مبتدأ مرفوع وعلامة رفعه الواو لأنه من الأسماء الخمسة",
-          "مبتدأ منصوب بالألف",
-          "اسم مجرور بالكسرة",
-          "خبر مرفوع بالضمة المقدرة"
-        ],
-        ans: 0,
-        tip: "رائع! في الجملة الاسمية المجردة يعود المبتدأ مرفوعاً بالواو (أخوكَ ذو فضلٍ)."
-      },
-      {
-        topicId: 1,
-        topicName: "الجملة الاسمية ونواسخها",
-        q: "أيٌّ من الآتي جملة اسمية منسوخة بحرف ناسخ مع الضبط التام السليم؟",
-        opts: [
-          "إنّ المعلمينَ مخلصونَ",
-          "إنّ المعلمونَ مخلصينَ",
-          "إنّ المعلمينَ مخلصينَ",
-          "كان المعلمينَ مخلصونَ"
-        ],
-        ans: 0,
-        tip: "ممتاز! المعلمينَ اسم إن منصوب بالياء، ومخلصونَ خبر إن مرفوع بالواو."
-      },
-      {
-        topicId: 1,
-        topicName: "الجملة الاسمية ونواسخها",
-        q: "ما نوع الخبر في جملة (المعلّمُ يشرحُ الدرسَ)؟",
-        opts: [
-          "خبر جملة فعلية",
-          "خبر مفرد",
-          "خبر شبه جملة جار ومجرور",
-          "خبر جملة اسمية"
-        ],
-        ans: 0,
-        tip: "صحيح! الفعل (يشرح) وفاعله المستتر يشكلان جملة فعلية في محل رفع خبر."
-      },
-
-      /* =================== القسم 2: إعراب الفعل المضارع (10 أسئلة) =================== */
-      {
-        topicId: 2,
-        topicName: "إعراب الفعل المضارع",
-        q: "يُرفع الفعل المضارع إذا:",
-        opts: [
-          "لم يُسبق بأداة ناصبة أو جازمة",
-          "سُبق بأداة جزم فقط",
-          "اتصلت به نون التوكيد",
-          "سُبق بأداة نصب فقط"
-        ],
-        ans: 0,
-        tip: "صحيح! الأصل في المضارع الرفع بالتجرد من الناصب والجازم."
-      },
-      {
-        topicId: 2,
-        topicName: "إعراب الفعل المضارع",
-        q: "ما علامة إعراب الفعل (يُهْمِلَ) في جملة: (لن يُهْمِلَ الطالبُ واجبه)؟",
-        opts: [
-          "منصوب وعلامة نصبه الفتحة الظاهرة",
-          "مرفوع وعلامة رفعه الضمة الظاهرة",
-          "مجزوم وعلامة جزمه السكون",
-          "مبني على الفتح في محل رفع"
-        ],
-        ans: 0,
-        tip: "صحيح! (لن) أداة نفي ونصب، ويُهملَ فعل مضارع منصوب بالفتحة الظاهرة."
-      },
-      {
-        topicId: 2,
-        topicName: "إعراب الفعل المضارع",
-        q: "ما علامة جزم الفعل في جملة: (لا تدعُ إلا الله وحده)؟",
-        opts: [
-          "حذف حرف العلة (الواو)",
-          "السكون الظاهر",
-          "الضمة الظاهرة",
-          "ثبوت حرف العلة"
-        ],
-        ans: 0,
-        tip: "إجابة دقيقة! (لا) الناهية جازمة، وأصل الفعل (تدعو) فحُذفت الواو وبقيت الضمة دليلاً عليها."
-      },
-      {
-        topicId: 2,
-        topicName: "إعراب الفعل المضارع",
-        q: "أيُّ مجموعة من الأدوات التالية تُعد حروفاً ناصبة للفعل المضارع؟",
-        opts: [
-          "أنْ، لَنْ، كَيْ، حتّى، لام التعليل",
-          "لَمْ، لا الناهية، لام الأمر، لمّا",
-          "إنْ، مَنْ، ما، متى، أينما",
-          "كان، أصبح، أضحى، ليس"
-        ],
-        ans: 0,
-        tip: "ممتاز! أدوات النصب هي (أن، لن، كي، حتى، لام التعليل)."
-      },
-      {
-        topicId: 2,
-        topicName: "إعراب الفعل المضارع",
-        q: "علامة رفع الفعل المضارع في جملة (المسلمون يحافظونَ على الصلاة) هي:",
-        opts: [
-          "ثبوت النون لأنه من الأفعال الخمسة",
-          "الواو لأنه جمع مذكر سالم",
-          "الضمة الظاهرة على آخره",
-          "النون المحذوفة"
-        ],
-        ans: 0,
-        tip: "أحسنت! يحافظون فعل مضارع من الأفعال الخمسة يرفع بثبوت النون."
-      },
-      {
-        topicId: 2,
-        topicName: "إعراب الفعل المضارع",
-        q: "ما علامة إعراب الفعل (يُقصّروا) في: (الطلابُ لم يُقصّروا في واجباتهم)؟",
-        opts: [
-          "مجزوم بحذف النون لأنه من الأفعال الخمسة",
-          "منصوب بحذف حرف العلة",
-          "مجزوم بالسكون المقدر",
-          "مرفوع بثبوت النون"
-        ],
-        ans: 0,
-        tip: "صحيح! (لم) حرف جزم، والأفعال الخمسة تجزم بحذف النون."
-      },
-      {
-        topicId: 2,
-        topicName: "إعراب الفعل المضارع",
-        q: "اللام في جملة (اجتهدْ في دراستك لِتنجحَ) هي:",
-        opts: [
-          "لام التعليل (حرف نصب)",
-          "لام الأمر (حرف جزم)",
-          "لام الجحود الجازمة",
-          "حرف جر خاص بالأسماء"
-        ],
-        ans: 0,
-        tip: "صحيح! لام التعليل تبين السبب وتنصب الفعل المضارع (لتنجحَ)."
-      },
-      {
-        topicId: 2,
-        topicName: "إعراب الفعل المضارع",
-        q: "ما إعراب الفعل (يقضي) في: (لم يقضِ القاضي بغير الحق)؟",
-        opts: [
-          "فعل مضارع مجزوم بـ(لم) وعلامة جزمه حذف حرف العلة",
-          "فعل مضارع مجرور بالكسرة الظاهرة",
-          "فعل مضارع منصوب بالفتحة المقدرة",
-          "فعل ماضٍ مبني على الكسر"
-        ],
-        ans: 0,
-        tip: "رائع! أصله (يقضي) وحُذفت الياء بسبب حرف الجزم (لم)."
-      },
-      {
-        topicId: 2,
-        topicName: "إعراب الفعل المضارع",
-        q: "في قوله تعالى: (فَلْيَقُولُوا خَيْرًا)، ما نوع اللام وما إعراب الفعل بعدها؟",
-        opts: [
-          "لام الأمر الجازمة، والفعل مجزوم بحذف النون",
-          "لام التعليل الناصبة، والفعل منصوب بالفتحة",
-          "لام التوكيد، والفعل مرفوع بثبوت النون",
-          "حرف عطف مبني على الفتح"
-        ],
-        ans: 0,
-        tip: "صحيح! لام الأمر حرف جزم تجزم المضارع بحذف النون إذا كان من الأفعال الخمسة."
-      },
-      {
-        topicId: 2,
-        topicName: "إعراب الفعل المضارع",
-        q: "ما حركة الفعل المضارع المعتل الآخر بالألف مثل (يسعى) في حالة الرفع؟",
-        opts: [
-          "ضمة مقدرة منع من ظهورها التعذر",
-          "ضمة ظاهرة على الألف",
-          "ضمة مقدرة منع من ظهورها الثقل",
-          "الفتحة الظاهرة"
-        ],
-        ans: 0,
-        tip: "ممتاز! تقدر الحركات على الألف للتعذر، بينما على الواو والياء للثقل."
-      },
-
-      /* =================== القسم 3: الفاعل ونائب الفاعل (10 أسئلة) =================== */
-      {
-        topicId: 3,
-        topicName: "الفاعل ونائب الفاعل",
-        q: "الفاعل هو اسم مرفوع يدل على من قام بالفعل، ويأتي بعد فعل:",
-        opts: [
-          "مبني للمعلوم",
-          "مبني للمجهول",
-          "جامد فقط",
-          "ناقص ناسخ"
-        ],
-        ans: 0,
-        tip: "صحيح! الفاعل يشترط أن يكون فعله مبنياً للمعلوم."
-      },
-      {
-        topicId: 3,
-        topicName: "الفاعل ونائب الفاعل",
-        q: "ما التغيير الذي يطرأ على الفعل الماضي الثلاثي عند بنائه للمجهول؟",
-        opts: [
-          "يُضمّ أوله ويُكسر ما قبل آخره",
-          "يُفتح أوله ويُضم ما قبل آخره",
-          "يُكسر أوله ويُسكن ما قبل آخره",
-          "يبقى على حاله دون أي تغيير"
-        ],
-        ans: 0,
-        tip: "صحيح! مثل: كَتَبَ ⬅ كُتِبَ، ضَرَبَ ⬅ ضُرِبَ."
-      },
-      {
-        topicId: 3,
-        topicName: "الفاعل ونائب الفاعل",
-        q: "ما التغيير الذي يطرأ على الفعل المضارع عند بنائه للمجهول؟",
-        opts: [
-          "يُضمّ أوله ويُفتح ما قبل آخره",
-          "يُكسر أوله ويُفتح ما قبل آخره",
-          "يُضمّ أوله ويُكسر ما قبل آخره",
-          "يُسكن الحرف الأخير فقط"
-        ],
-        ans: 0,
-        tip: "أحسنت! مثل: يَكْتُبُ ⬅ يُكْتَبُ، يَشْرَبُ ⬅ يُشْرَبُ."
-      },
-      {
-        topicId: 3,
-        topicName: "الفاعل ونائب الفاعل",
-        q: "عند تحويل جملة (كَتَبَ الطالبُ الدرسَ) إلى مبني للمجهول تصبح:",
-        opts: [
-          "كُتِبَ الدرسُ",
-          "كَتَبَ الدرسَ",
-          "يُكتَبُ الدرسَ",
-          "كُتِبَ الطالبَ"
-        ],
-        ans: 0,
-        tip: "صحيح! يُحذف الفاعل، ويتحول المفعول به المنصوب إلى نائب فاعل مرفوع (كُتِبَ الدرسُ)."
-      },
-      {
-        topicId: 3,
-        topicName: "الفاعل ونائب الفاعل",
-        q: "ما هو حكم نائب الفاعل الإعرابي دائماً؟",
-        opts: [
-          "الرفع دائماً",
-          "النصب دائماً",
-          "الجر دائماً",
-          "الجزم دائماً"
-        ],
-        ans: 0,
-        tip: "ممتاز! نائب الفاعل يحل محل الفاعل فيأخذ حكمه الأصلي وهو الرفع دائماً."
-      },
-      {
-        topicId: 3,
-        topicName: "الفاعل ونائب الفاعل",
-        q: "في جملة (يُكرَمُ المتفوقونَ)، إعراب كلمة (المتفوقون):",
-        opts: [
-          "نائب فاعل مرفوع وعلامة رفعه الواو لأنه جمع مذكر سالم",
-          "فاعل مرفوع بالضمة الظاهرة",
-          "مفعول به منصوب وعلامة نصبه الفتحة",
-          "مبتدأ مؤخر مرفوع بالألف"
-        ],
-        ans: 0,
-        tip: "صحيح! الفعل (يُكرَم) مبني للمجهول، والمتفوقون نائب فاعل مرفوع بالواو."
-      },
-      {
-        topicId: 3,
-        topicName: "الفاعل ونائب الفاعل",
-        q: "عند بناء الفعل (قالَ) للمجهول في الزمن الماضي يصبح:",
-        opts: ["قِيلَ", "قُولَ", "يُقال", "يَقُول"],
-        ans: 0,
-        tip: "إجابة متقنة! الأجوف الماضي المعتل الوسط تُكسر فاؤه وتقلب ألفه ياءً (قِيلَ، صِيمَ، بِيعَ)."
-      },
-      {
-        topicId: 3,
-        topicName: "الفاعل ونائب الفاعل",
-        q: "في جملة (انتصرَ الحقُّ)، كلمة (الحقُّ) تُعرب:",
-        opts: [
-          "فاعلاً مرفوعاً وعلامة رفعه الضمة",
-          "نائب فاعل مرفوع",
-          "مفعولاً به منصوباً",
-          "اسماً لـ(كان) المحذوفة"
-        ],
-        ans: 0,
-        tip: "صحيح! انتصر فعل مبني للمعلوم، والحق هو من اتصف بالفعل فهو فاعل مرفوع."
-      },
-      {
-        topicId: 3,
-        topicName: "الفاعل ونائب الفاعل",
-        q: "ما علامة رفع الفاعل في جملة: (ألقى الشاعرانِ قصيدتيهما)؟",
-        opts: [
-          "الألف لأنه مثنى",
-          "الضمة المقدرة",
-          "الياء لأنه ملحق بالمثنى",
-          "النون الظاهرة"
-        ],
-        ans: 0,
-        tip: "ممتاز! (الشاعران) فاعل مرفوع وعلامة رفعه الألف لأنه مثنى."
-      },
-      {
-        topicId: 3,
-        topicName: "الفاعل ونائب الفاعل",
-        q: "ما الذي ينوب عن الفاعل غالباً بعد حذفه في الجملة المتعدية؟",
-        opts: [
-          "المفعول به",
-          "المبتدأ",
-          "حرف الجر وحده",
-          "الفعل المضارع"
-        ],
-        ans: 0,
-        tip: "صحيح! الأصل أن ينوب المفعول به عن الفاعل فيرفع بعد أن كان منصوباً."
-      },
-
-      /* =================== القسم 4: علامات الإعراب الأصلية والفرعية (10 أسئلة) =================== */
-      {
-        topicId: 4,
-        topicName: "علامات الإعراب الأصلية والفرعية",
-        q: "ما هي علامة الرفع الأصلية في اللغة العربية؟",
-        opts: ["الضمة", "الألف", "الواو", "ثبوت النون"],
-        ans: 0,
-        tip: "صحيح! الضمة هي علامة الرفع الأصلية، وباقي العلامات فرعية تنوب عنها."
-      },
-      {
-        topicId: 4,
-        topicName: "علامات الإعراب الأصلية والفرعية",
-        q: "يُنصب جمع المؤنث السالم بعلامة فرعية بديلة عن الفتحة هي:",
-        opts: ["الكسرة", "الياء", "الألف", "الفتحة المقدرة"],
-        ans: 0,
-        tip: "ممتاز! جمع المؤنث السالم ينصب بالكسرة نيابة عن الفتحة (مثال: خلقَ اللهُ السماواتِ)."
-      },
-      {
-        topicId: 4,
-        topicName: "علامات الإعراب الأصلية والفرعية",
-        q: "ما هي علامة رفع الأسماء الخمسة (أبو، أخو، حمو، فو، ذو)؟",
-        opts: ["الواو", "الألف", "الضمة الظاهرة", "النون"],
-        ans: 0,
-        tip: "صحيح! تُرفع الأسماء الخمسة بالواو، وتُنصب بالألف، وتُجر بالياء."
-      },
-      {
-        topicId: 4,
-        topicName: "علامات الإعراب الأصلية والفرعية",
-        q: "ما هي علامة الجزم الأصلية في الأفعال الصحيحة؟",
-        opts: ["السكون", "حذف حرف العلة", "حذف النون", "الكسرة"],
-        ans: 0,
-        tip: "صحيح! السكون هو علامة الجزم الأصلية الوحيدة."
-      },
-      {
-        topicId: 4,
-        topicName: "علامات الإعراب الأصلية والفرعية",
-        q: "بماذا يُنصب ويُجر جمع المذكر السالم؟",
-        opts: ["بالياء", "بالألف", "بالفتحة", "بالواو"],
-        ans: 0,
-        tip: "أحسنت! جمع المذكر السالم يرفع بالواو وينصب ويجر بالياء."
-      },
-      {
-        topicId: 4,
-        topicName: "علامات الإعراب الأصلية والفرعية",
-        q: "أيٌّ من الآتي يُعرب بالعلامات الفرعية فقط؟",
-        opts: [
-          "المثنى والأسماء الخمسة والأفعال الخمسة",
-          "المفرد الصحيح وجمع التكسير",
-          "الفعل الماضي وفعل الأمر",
-          "الاسم المفرد المنصرف"
-        ],
-        ans: 0,
-        tip: "صحيح! المثنى وجمع المذكر والأسماء الخمسة والأفعال الخمسة تعرب بالحروف بدلاً من الحركات."
-      },
-      {
-        topicId: 4,
-        topicName: "علامات الإعراب الأصلية والفرعية",
-        q: "علامة جزم الفعل المعتل الآخر (مثل: يرمي / يسعى / يرجو) هي:",
-        opts: [
-          "حذف حرف العلة",
-          "السكون المقدر",
-          "ثبوت حرف العلة",
-          "الفتحة الظاهرة"
-        ],
-        ans: 0,
-        tip: "ممتاز! يحذف حرف العلة كعلامة فرعية للجزم (لم يرمِ، لم يسعَ، لم يرجُ)."
-      },
-      {
-        topicId: 4,
-        topicName: "علامات الإعراب الأصلية والفرعية",
-        q: "في جملة (كرّم المديرُ أباك)، علامة نصب المفعول به (أباك) هي:",
-        opts: [
-          "الألف لأنه من الأسماء الخمسة",
-          "الفتحة المقدرة على الألف",
-          "الياء لأنه مفرد",
-          "الكاف المتصلة"
-        ],
-        ans: 0,
-        tip: "صحيح! الأسماء الخمسة تنصب بالألف نيابة عن الفتحة."
-      },
-      {
-        topicId: 4,
-        topicName: "علامات الإعراب الأصلية والفرعية",
-        q: "ما علامة إعراب المثنى في حالتي النصب والجر؟",
-        opts: ["الياء", "الألف", "الكسرة المقدرة", "الفتحة"],
-        ans: 0,
-        tip: "صحيح! المثنى يرفع بالألف وينصب ويجر بالياء (قرأتُ كتابينِ / مررتُ بكتابينِ)."
-      },
-      {
-        topicId: 4,
-        topicName: "علامات الإعراب الأصلية والفرعية",
-        q: "ما هي علامة رفع الأفعال الخمسة وعلامة نصبها وجزمها؟",
-        opts: [
-          "ترفع بثبوت النون، وتنصب وتجزم بحذف النون",
-          "ترفع بالواو، وتنصب بالياء، وتجزم بالسكون",
-          "ترفع بالضمة، وتنصب وتجزم بحذف حرف العلة",
-          "ترفع بالألف، وتنصب وتجزم بالفتحة"
-        ],
-        ans: 0,
-        tip: "إجابة تامة وصحيحة 100%! الأفعال الخمسة ترفع بثبوت النون وتنصب وتجزم بحذفها."
-      }
-    ];
-
-    let activeQuestions = [...questionsDB];
-    let currentIndex = 0;
-    let currentScore = 0;
-    let selectedFilter = 'all';
-
-    function setQuizFilter(filter) {
-      selectedFilter = filter;
-      document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
-      
-      const buttons = document.querySelectorAll('.filter-chip');
-      if (filter === 'all') buttons[0].classList.add('active');
-      else if (filter === 1) buttons[1].classList.add('active');
-      else if (filter === 2) buttons[2].classList.add('active');
-      else if (filter === 3) buttons[3].classList.add('active');
-      else if (filter === 4) buttons[4].classList.add('active');
-
-      if (filter === 'all') {
-        activeQuestions = [...questionsDB];
       } else {
-        activeQuestions = questionsDB.filter(q => q.topicId === filter);
-      }
-
-      restartCurrentQuiz();
-    }
-
-    function startQuizWithTopic(topicId) {
-      switchMainTab('quiz');
-      setQuizFilter(topicId);
-      window.scrollTo({ top: 120, behavior: 'smooth' });
-    }
-
-    function restartCurrentQuiz() {
-      currentIndex = 0;
-      currentScore = 0;
-      document.getElementById('score-display').innerText = currentScore;
-      document.getElementById('quiz-active-area').style.display = 'block';
-      document.getElementById('quiz-result-area').style.display = 'none';
-      renderQuestion();
-    }
-
-    function renderQuestion() {
-      if (activeQuestions.length === 0) return;
-      const qData = activeQuestions[currentIndex];
-
-      document.getElementById('current-topic-label').innerText = `الموضوع: ${qData.topicName}`;
-      document.getElementById('quiz-progress-text').innerText = `السؤال ${currentIndex + 1} من ${activeQuestions.length}`;
-      document.getElementById('quiz-question-title').innerText = qData.q;
-
-      const ansBox = document.getElementById('answers-container');
-      ansBox.innerHTML = '';
-
-      const feedback = document.getElementById('feedback-box');
-      feedback.style.display = 'none';
-      document.getElementById('next-btn').style.display = 'none';
-
-      qData.opts.forEach((opt, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'answer-btn';
-        btn.innerHTML = `<i class="fa-regular fa-circle" style="color: #60a5fa;"></i> <span>${opt}</span>`;
-        btn.onclick = () => checkSelectedAnswer(idx);
-        ansBox.appendChild(btn);
-      });
-    }
-
-    function checkSelectedAnswer(pickedIdx) {
-      const qData = activeQuestions[currentIndex];
-      const buttons = document.querySelectorAll('.answer-btn');
-      const feedback = document.getElementById('feedback-box');
-
-      buttons.forEach(btn => btn.disabled = true);
-
-      if (pickedIdx === qData.ans) {
-        // إجابة صحيحة
-        playSuccessSound();
-        buttons[pickedIdx].classList.add('correct');
-        buttons[pickedIdx].querySelector('i').className = 'fa-solid fa-circle-check';
-        
-        feedback.style.display = 'block';
-        feedback.style.background = 'rgba(16, 185, 129, 0.16)';
-        feedback.style.border = '1px solid rgba(16, 185, 129, 0.4)';
-        feedback.style.color = '#34d399';
-        feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${qData.tip}`;
-
-        currentScore += 10;
-        document.getElementById('score-display').innerText = currentScore;
-
-        confetti({
-          particleCount: 100,
-          spread: 80,
-          origin: { y: 0.6 }
-        });
-      } else {
-        // إجابة خاطئة
-        playErrorSound();
-        buttons[pickedIdx].classList.add('wrong');
-        buttons[pickedIdx].querySelector('i').className = 'fa-solid fa-circle-xmark';
-        
-        // إظهار الإجابة الصحيحة للطلاب
-        buttons[qData.ans].classList.add('correct');
-        buttons[qData.ans].querySelector('i').className = 'fa-solid fa-circle-check';
-
-        feedback.style.display = 'block';
-        feedback.style.background = 'rgba(239, 68, 68, 0.16)';
-        feedback.style.border = '1px solid rgba(239, 68, 68, 0.4)';
-        feedback.style.color = '#fca5a5';
-        feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> إجابة غير صحيحة! الإجابة الصحيحة هي: "<strong>${qData.opts[qData.ans]}</strong>". <br><span style="color:#e2e8f0; font-size:1rem;">📌 ${qData.tip}</span>`;
-      }
-
-      document.getElementById('next-btn').style.display = 'inline-flex';
-    }
-
-    function goToNextQuestion() {
-      currentIndex++;
-      if (currentIndex < activeQuestions.length) {
-        renderQuestion();
-      } else {
-        showFinalResults();
+        text.innerText = 'الصوت: نشط';
+        icon.className = 'fa-solid fa-volume-high';
       }
     }
 
-    function showFinalResults() {
-      document.getElementById('quiz-active-area').style.display = 'none';
-      const resultArea = document.getElementById('quiz-result-area');
-      resultArea.style.display = 'block';
-
-      const totalPossible = activeQuestions.length * 10;
-      const pct = Math.round((currentScore / totalPossible) * 100);
-
-      document.getElementById('result-summary-text').innerText = 
-        `حصلت على ${currentScore} درجة من إجمالي ${totalPossible} درجات.`;
-      document.getElementById('result-percentage').innerText = `${pct}% كفاءة لغوية`;
-
-      confetti({ particleCount: 200, spread: 110, origin: { y: 0.5 } });
+    function toggleProjectorMode() {
+      document.body.classList.toggle('projector-mode');
+      const btn = document.getElementById('projector-btn');
+      btn.classList.toggle('active');
     }
 
-    // تبديل التبويبات الرئيسية
-    function switchMainTab(tab) {
-      document.querySelectorAll('.tab-switch').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-
-      if (tab === 'summary') {
-        document.querySelectorAll('.tab-switch')[0].classList.add('active');
-        document.getElementById('summary-view').classList.add('active');
-      } else {
-        document.querySelectorAll('.tab-switch')[1].classList.add('active');
-        document.getElementById('quiz-view').classList.add('active');
-        if (currentIndex === 0 && document.getElementById('quiz-active-area').style.display !== 'none') {
-          renderQuestion();
-        }
-      }
-    }
-
-    // تكبير الخط للبروجكتر
-    function toggleZoom() {
-      document.body.classList.toggle('projector-zoom');
-    }
-
-    // ملء الشاشة للعرض
-    function toggleFullScreen() {
+    function toggleFullScreenMode() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(() => {});
       } else {
@@ -1568,8 +1343,609 @@
       }
     }
 
-    // تهيئة أولية للأسئلة
-    renderQuestion();
+    // Complete Database with 40 Accurate High-School Questions (10 per topic)
+    const masterBank = [
+      /* ================= 1. الجملة الاسمية ونواسخها (10 أسئلة) ================= */
+      {
+        topic: 1,
+        topicTitle: "الجملة الاسمية ونواسخها",
+        q: "ما هو الأثر الإعرابي الصحيح عند دخول (كان وأخواتها) على الجملة الاسمية؟",
+        opts: [
+          "ترفع المبتدأ ويسمى اسمها، وتنصب الخبر ويسمى خبرها",
+          "تنصب المبتدأ ويسمى اسمها، وترفع الخبر ويسمى خبرها",
+          "تنصب المبتدأ والخبر معاً",
+          "ترفع المبتدأ والخبر معاً"
+        ],
+        correct: 0,
+        exp: "صحيح 100%! كان وأخواتها أفعال ناسخة ناقصة ترفع المبتدأ وتنصب الخبر."
+      },
+      {
+        topic: 1,
+        topicTitle: "الجملة الاسمية ونواسخها",
+        q: "ما هو الأثر الإعرابي الصحيح عند دخول (إنّ وأخواتها) على الجملة الاسمية؟",
+        opts: [
+          "ترفع المبتدأ وتنصب الخبر",
+          "تنصب المبتدأ ويسمى اسمها، وترفع الخبر ويسمى خبرها",
+          "تجزم المبتدأ والخبر",
+          "تبني المبتدأ على الضم"
+        ],
+        correct: 1,
+        exp: "رائع! إنّ وأخواتها حروف ناسخة مشبهة بالفعل تنصب المبتدأ وترفع الخبر."
+      },
+      {
+        topic: 1,
+        topicTitle: "الجملة الاسمية ونواسخها",
+        q: "ما إعراب الكلمتين الملونتين في جملة: (كان الطالبانِ مجتهدينِ)؟",
+        opts: [
+          "اسم كان مرفوع بالألف، وخبرها منصوب بالياء لأنهما مثنى",
+          "اسم كان منصوب بالياء، وخبرها مرفوع بالواو",
+          "فاعل مرفوع بالضمة، ومفعول به منصوب",
+          "مبتدأ وخبر كلاهما مرفوع بالألف"
+        ],
+        correct: 0,
+        exp: "إجابة متقنة! اسم كان يرفع بالألف لأنه مثنى، وخبرها ينصب بالياء لأنه مثنى."
+      },
+      {
+        topic: 1,
+        topicTitle: "الجملة الاسمية ونواسخها",
+        q: "أيٌّ من الأدوات الآتية يُعد من أخوات (كان) الناسخة؟",
+        opts: ["لعلّ", "أصبح", "كأنّ", "ليتَ"],
+        correct: 1,
+        exp: "صحيح! (أصبح) من الأفعال الناسخة، بينما الباقي من الحروف الناسخة."
+      },
+      {
+        topic: 1,
+        topicTitle: "الجملة الاسمية ونواسخها",
+        q: "في جملة (لعلّ النصرَ قريبٌ)، إعراب كلمة (النصرَ) هو:",
+        opts: [
+          "اسم لعلّ منصوب وعلامة نصبه الفتحة الظاهرة",
+          "خبر لعلّ مرفوع وعلامة رفعه الضمة",
+          "مبتدأ مرفوع وعلامة رفعه الضمة",
+          "مفعول به مقدم منصوب"
+        ],
+        correct: 0,
+        exp: "أحسنت! (لعلّ) من أخوات إنّ تنصب الاسم الذي يليها."
+      },
+      {
+        topic: 1,
+        topicTitle: "الجملة الاسمية ونواسخها",
+        q: "عند دخول الفعل الناسخ (صار) على جملة (الماءُ ثلجٌ)، يكون الضبط التام:",
+        opts: ["صارَ الماءُ ثلجاً", "صارَ الماءَ ثلجٌ", "صارَ الماءَ ثلجاً", "صارَ الماءُ ثلجٍ"],
+        correct: 0,
+        exp: "صحيح! (صار) فعل ناسخ يرفع المبتدأ (الماءُ) وينصب الخبر (ثلجاً)."
+      },
+      {
+        topic: 1,
+        topicTitle: "الجملة الاسمية ونواسخها",
+        q: "ما المعنى البلاغي والنحوي الذي يفيده الحرف الناسخ (ليتَ)؟",
+        opts: ["التمنّي", "الترجي", "التشبيه", "الاستدراك"],
+        correct: 0,
+        exp: "ممتاز! (ليت) تفيد التمني للشيء الصعب أو المستحيل، بينما (لعل) تفيد الترجي."
+      },
+      {
+        topic: 1,
+        topicTitle: "الجملة الاسمية ونواسخها",
+        q: "إذا حُذفت (إنّ) من جملة (إنّ أخاك ذو فضلٍ)، تعود الجملة إلى أصلها كالتالي:",
+        opts: [
+          "أخوكَ ذو فضلٍ (مبتدأ وخبر كلاهما مرفوع بالواو)",
+          "أخاك ذا فضلٍ",
+          "أخيكَ ذي فضلٍ",
+          "أخوكَ ذا فضلٍ"
+        ],
+        correct: 0,
+        exp: "دقيق جداً! الأسماء الخمسة ترفع بالواو فيعود المبتدأ والخبر مرفوعين بالواو."
+      },
+      {
+        topic: 1,
+        topicTitle: "الجملة الاسمية ونواسخها",
+        q: "أي الجمل التالية تمثل جملة منسوخة بحرف ناسخ مضبوطة ضبطاً سليماً؟",
+        opts: [
+          "إنّ المعلمينَ مخلصونَ",
+          "إنّ المعلمونَ مخلصينَ",
+          "إنّ المعلمينَ مخلصينَ",
+          "إنّ المعلمونَ مخلصونَ"
+        ],
+        correct: 0,
+        exp: "صحيح! اسمها (المعلمينَ) منصوب بالياء، وخبرها (مخلصونَ) مرفوع بالواو."
+      },
+      {
+        topic: 1,
+        topicTitle: "الجملة الاسمية ونواسخها",
+        q: "ما نوع الخبر في جملة: (المعلّمُ يشرحُ الدرسَ بإخلاصٍ)؟",
+        opts: ["خبر جملة فعلية", "خبر مفرد", "خبر شبه جملة جار ومجرور", "خبر شبه جملة ظرفي"],
+        correct: 0,
+        exp: "ممتاز! الفعل (يشرح) والفاعل المستتر في محل رفع خبر المبتدأ (جملة فعلية)."
+      },
+
+      /* ================= 2. إعراب الفعل المضارع (10 أسئلة) ================= */
+      {
+        topic: 2,
+        topicTitle: "إعراب الفعل المضارع",
+        q: "الأصل في الفعل المضارع أن يكون معرباً، ويأتي مرفوعاً إذا:",
+        opts: [
+          "لم يُسبق بأداة نصب أو أداة جزم",
+          "سُبق بأداة نصب فقط",
+          "سُبق بـ (لم) و (لا الناهية)",
+          "اتصلت به نون التوكيد المباشرة"
+        ],
+        correct: 0,
+        exp: "صحيح! يُرفع المضارع بالتجرد التام من أدوات النصب والجزم."
+      },
+      {
+        topic: 2,
+        topicTitle: "إعراب الفعل المضارع",
+        q: "ما إعراب الفعل (يُهْمِلَ) في جملة: (لن يُهْمِلَ المجدُّ واجبه)؟",
+        opts: [
+          "فعل مضارع منصوب بـ(لن) وعلامة نصبه الفتحة الظاهرة",
+          "فعل مضارع مرفوع وعلامة رفعه الضمة",
+          "فعل مضارع مجزوم وعلامة جزمه السكون",
+          "فعل ماضٍ مبني على الفتح"
+        ],
+        correct: 0,
+        exp: "أحسنت! (لن) حرف نفي ونصب واستقبال ينصب الفعل المضارع بالفتحة."
+      },
+      {
+        topic: 2,
+        topicTitle: "إعراب الفعل المضارع",
+        q: "ما علامة جزم الفعل في قوله: (لا تدعُ إلا الله وحده)؟",
+        opts: [
+          "حذف حرف العلة (الواو)",
+          "السكون الظاهر على آخره",
+          "ثبوت النون",
+          "الضمة الظاهرة"
+        ],
+        correct: 0,
+        exp: "ممتاز! أصل الفعل (تدعو)، وجُزم بـ(لا الناهية) بحذف حرف العلة والضمة دليل عليه."
+      },
+      {
+        topic: 2,
+        topicTitle: "إعراب الفعل المضارع",
+        q: "أي مجموعة مما يلي تمثل أدوات نصب الفعل المضارع بالكامل؟",
+        opts: [
+          "أنْ، لَنْ، كَيْ، حتّى، لام التعليل",
+          "لَمْ، لا الناهية، لام الأمر، لمّا",
+          "إنْ، مَنْ، ما، متى، أينما",
+          "كان، أصبح، ما زال، ليس"
+        ],
+        correct: 0,
+        exp: "صحيح! (أن، لن، كي، حتى، لام التعليل) هي أدوات النصب."
+      },
+      {
+        topic: 2,
+        topicTitle: "إعراب الفعل المضارع",
+        q: "علامة رفع الفعل المضارع في: (المؤمنون يحافظونَ على الصلاة) هي:",
+        opts: [
+          "ثبوت النون لأنه من الأفعال الخمسة",
+          "الواو لأنه جمع مذكر سالم",
+          "الضمة الظاهرة",
+          "النون المقدرة"
+        ],
+        correct: 0,
+        exp: "صحيح! الأفعال الخمسة ترفع بثبوت النون وتنصب وتجزم بحذفها."
+      },
+      {
+        topic: 2,
+        topicTitle: "إعراب الفعل المضارع",
+        q: "ما علامة إعراب الفعل (يُقصّروا) في: (الطلابُ لم يُقصّروا في دراستهم)؟",
+        opts: [
+          "مجزوم بـ(لم) وعلامة جزمه حذف النون",
+          "منصوب وعلامة نصبه الفتحة",
+          "مجزوم وعلامة جزمه السكون",
+          "مرفوع بثبوت النون"
+        ],
+        correct: 0,
+        exp: "أحسنت! (لم) أداة جزم، والأفعال الخمسة تجزم بحذف النون."
+      },
+      {
+        topic: 2,
+        topicTitle: "إعراب الفعل المضارع",
+        q: "اللام المتصلة بالفعل في جملة (اجتهدْ لِتنجحَ في حياتك) هي:",
+        opts: [
+          "لام التعليل (ناصبة للفعل المضارع)",
+          "لام الأمر (جازمة للفعل المضارع)",
+          "لام التوكيد المزحلقة",
+          "حرف جر للأسماء"
+        ],
+        correct: 0,
+        exp: "صحيح! لام التعليل تبين السبب وتنصب الفعل المضارع بالفتحة."
+      },
+      {
+        topic: 2,
+        topicTitle: "إعراب الفعل المضارع",
+        q: "ما إعراب الفعل (يقضِ) في: (لم يقضِ القاضي إلا بالعدل)؟",
+        opts: [
+          "فعل مضارع مجزوم وعلامة جزمه حذف حرف العلة (الياء)",
+          "فعل مضارع مجرور بالكسرة الظاهرة",
+          "فعل ماضٍ مبني على الكسر",
+          "فعل مضارع منصوب بالفتحة المقدرة"
+        ],
+        correct: 0,
+        exp: "ممتاز! أصله (يقضي) وحُذفت الياء بسبب حرف الجزم (لم)."
+      },
+      {
+        topic: 2,
+        topicTitle: "إعراب الفعل المضارع",
+        q: "في قوله تعالى: (فَلْيَقُولُوا خَيْرًا)، ما نوع اللام وعلامة إعراب الفعل؟",
+        opts: [
+          "لام الأمر الجازمة، والفعل مجزوم بحذف النون",
+          "لام التعليل الناصبة، والفعل منصوب بحذف النون",
+          "لام الجحود، والفعل مبني على الفتح",
+          "لام التوكيد، والفعل مرفوع بثبوت النون"
+        ],
+        correct: 0,
+        exp: "صحيح! لام الأمر حرف جزم جزم الفعل من الأفعال الخمسة بحذف النون."
+      },
+      {
+        topic: 2,
+        topicTitle: "إعراب الفعل المضارع",
+        q: "ما علامة رفع الفعل المضارع المعتل الآخر بالألف مثل (يسعى)؟",
+        opts: [
+          "ضمة مقدرة منع من ظهورها التعذر",
+          "ضمة ظاهرة على الألف",
+          "ضمة مقدرة منع من ظهورها الثقل",
+          "ثبوت حرف العلة"
+        ],
+        correct: 0,
+        exp: "دقيق جداً! تقدر الحركات على الألف دائماً للتعذر (استحالة نطق الحركة)."
+      },
+
+      /* ================= 3. الفاعل ونائب الفاعل (10 أسئلة) ================= */
+      {
+        topic: 3,
+        topicTitle: "الفاعل ونائب الفاعل",
+        q: "الفاعل اسم مرفوع يدل على من قام بالفعل، ويأتي دائماً بعد فعل:",
+        opts: ["مبني للمعلوم", "مبني للمجهول", "ناقص ناسخ", "محذوف وجوباً دائماً"],
+        correct: 0,
+        exp: "صحيح! الفاعل يقع بعد فعل تام مبني للمعلوم."
+      },
+      {
+        topic: 3,
+        topicTitle: "الفاعل ونائب الفاعل",
+        q: "ما التغيير الصرفي في الفعل الماضي الثلاثي عند بنائه للمجهول؟",
+        opts: [
+          "يُضمّ أوله ويُكسر ما قبل آخره",
+          "يُفتح أوله ويُضم ما قبل آخره",
+          "يُكسر أوله ويُسكن ما قبل آخره",
+          "يبقى كما هو دون تغيير الحركات"
+        ],
+        correct: 0,
+        exp: "صحيح! الماضي يُضم أوله ويُكسر ما قبل آخره مثل: كَتَبَ ⬅ كُتِبَ."
+      },
+      {
+        topic: 3,
+        topicTitle: "الفاعل ونائب الفاعل",
+        q: "ما التغيير الصرفي في الفعل المضارع عند بنائه للمجهول؟",
+        opts: [
+          "يُضمّ أوله ويُفتح ما قبل آخره",
+          "يُضمّ أوله ويُكسر ما قبل آخره",
+          "يُفتح أوله ويُكسر ما قبل آخره",
+          "تُحذف حروف المضارعة"
+        ],
+        correct: 0,
+        exp: "ممتاز! المضارع يُضم أوله ويُفتح ما قبل آخره مثل: يَكْتُبُ ⬅ يُكْتَبُ."
+      },
+      {
+        topic: 3,
+        topicTitle: "الفاعل ونائب الفاعل",
+        q: "عند بناء جملة (كَتَبَ الطالبُ الدرسَ) للمجهول تصبح:",
+        opts: ["كُتِبَ الدرسُ", "كَتَبَ الدرسَ", "يُكتَبُ الدرسَ", "كُتِبَ الطالبَ"],
+        correct: 0,
+        exp: "أحسنت! نحذف الفاعل (الطالب)، ويتحول المفعول به لنائب فاعل مرفوع (الدرسُ)."
+      },
+      {
+        topic: 3,
+        topicTitle: "الفاعل ونائب الفاعل",
+        q: "ما هو الحكم الإعرابي لنائب الفاعل دائماً؟",
+        opts: ["الرفع دائماً", "النصب دائماً", "الجر دائماً", "الجزم دائماً"],
+        correct: 0,
+        exp: "صحيح! نائب الفاعل يحل محل الفاعل فيأخذ حكمه وهو الرفع دائماً."
+      },
+      {
+        topic: 3,
+        topicTitle: "الفاعل ونائب الفاعل",
+        q: "في جملة (يُكْرَمُ المتفوقونَ في الحفل)، إعراب كلمة (المتفوقون) هو:",
+        opts: [
+          "نائب فاعل مرفوع وعلامة رفعه الواو لأنه جمع مذكر سالم",
+          "فاعل مرفوع بالضمة الظاهرة",
+          "مفعول به منصوب بالياء",
+          "مبتدأ مؤخر مرفوع بالواو"
+        ],
+        correct: 0,
+        exp: "ممتاز! الفعل (يُكرَم) مبني للمجهول، والمتفوقون نائب فاعل مرفوع بالواو."
+      },
+      {
+        topic: 3,
+        topicTitle: "الفاعل ونائب الفاعل",
+        q: "عند بناء الفعل الأجوف الماضي (قالَ) للمجهول يصبح:",
+        opts: ["قِيلَ", "قُولَ", "يُقال", "أُقيل"],
+        correct: 0,
+        exp: "صحيح! في الأجوف الماضي تكسر الفاء وتقلب الألف ياءً (قِيل، صِيم، بِيع)."
+      },
+      {
+        topic: 3,
+        topicTitle: "الفاعل ونائب الفاعل",
+        q: "في جملة (انتصرَ الحقُّ)، كلمة (الحقُّ) تعرب:",
+        opts: [
+          "فاعلاً مرفوعاً وعلامة رفعه الضمة الظاهرة",
+          "نائب فاعل مرفوع بالضمة",
+          "مفعولاً به منصوباً",
+          "اسماً لناسخ محذوف"
+        ],
+        correct: 0,
+        exp: "صحيح! انتصر فعل مبني للمعلوم، والحق هو من اتصف بالفعل فهو فاعل."
+      },
+      {
+        topic: 3,
+        topicTitle: "الفاعل ونائب الفاعل",
+        q: "ما علامة رفع الفاعل في جملة: (ألقى الشاعرانِ قصيدتيهما)؟",
+        opts: ["الألف لأنه مثنى", "الضمة المقدرة", "الياء لأنه مثنى", "النون الظاهرة"],
+        correct: 0,
+        exp: "أحسنت! المثنى يرفع بالألف."
+      },
+      {
+        topic: 3,
+        topicTitle: "الفاعل ونائب الفاعل",
+        q: "ما العنصر الأساسي الذي ينوب عن الفاعل بعد حذفه في الجملة المتعدية؟",
+        opts: ["المفعول به", "المبتدأ", "حرف العطف", "الفعل المضارع"],
+        correct: 0,
+        exp: "صحيح! الأصل في الجمل المتعدية أن ينوب المفعول به عن الفاعل المحذوف."
+      },
+
+      /* ================= 4. علامات الإعراب الأصلية والفرعية (10 أسئلة) ================= */
+      {
+        topic: 4,
+        topicTitle: "علامات الإعراب الأصلية والفرعية",
+        q: "ما هي علامة الرفع الأصلية الوحيدة في اللغة العربية؟",
+        opts: ["الضمة", "الألف", "الواو", "ثبوت النون"],
+        correct: 0,
+        exp: "صحيح! الضمة هي علامة الرفع الأصلية، وبقية العلامات فرعية تنوب عنها."
+      },
+      {
+        topic: 4,
+        topicTitle: "علامات الإعراب الأصلية والفرعية",
+        q: "يُنصب جمع المؤنث السالم بعلامة فرعية بديلة عن الفتحة هي:",
+        opts: ["الكسرة نيابة عن الفتحة", "الياء", "الألف", "الفتحة المقدرة"],
+        correct: 0,
+        exp: "ممتاز! جمع المؤنث السالم ينصب بالكسرة (مثال: خلقَ اللهُ السماواتِ)."
+      },
+      {
+        topic: 4,
+        topicTitle: "علامات الإعراب الأصلية والفرعية",
+        q: "ما هي علامة رفع الأسماء الخمسة (أبو، أخو، حمو، فو، ذو)؟",
+        opts: ["الواو", "الألف", "الضمة", "الياء"],
+        correct: 0,
+        exp: "صحيح! ترفع الأسماء الخمسة بالواو، وتنصب بالألف، وتجر بالياء."
+      },
+      {
+        topic: 4,
+        topicTitle: "علامات الإعراب الأصلية والفرعية",
+        q: "ما هي علامة الجزم الأصلية في الأفعال صحيحة الآخر؟",
+        opts: ["السكون", "حذف حرف العلة", "حذف النون", "الكسرة"],
+        correct: 0,
+        exp: "صحيح! السكون هو علامة الجزم الأصلية."
+      },
+      {
+        topic: 4,
+        topicTitle: "علامات الإعراب الأصلية والفرعية",
+        q: "بماذا يُنصب ويُجر جمع المذكر السالم؟",
+        opts: ["بالياء", "بالألف", "بالفتحة", "بالواو"],
+        correct: 0,
+        exp: "أحسنت! جمع المذكر السالم يرفع بالواو وينصب ويجر بالياء."
+      },
+      {
+        topic: 4,
+        topicTitle: "علامات الإعراب الأصلية والفرعية",
+        q: "أي مجموعة مما يلي تُعرب بالعلامات الفرعية (الحروف) دائماً؟",
+        opts: [
+          "المثنى والأسماء الخمسة والأفعال الخمسة",
+          "المفرد الصحيح وجمع التكسير",
+          "الفعل الماضي وفعل الأمر",
+          "الاسم المفرد المنصرف"
+        ],
+        correct: 0,
+        exp: "صحيح! المثنى والأسماء الخمسة والأفعال الخمسة تعرب بالحروف فرعياً."
+      },
+      {
+        topic: 4,
+        topicTitle: "علامات الإعراب الأصلية والفرعية",
+        q: "علامة جزم الفعل المضارع المعتل الآخر مثل (يسعى / يدعو / يقضي) هي:",
+        opts: ["حذف حرف العلة", "السكون المقدر", "ثبوت حرف العلة", "الفتحة الظاهرة"],
+        correct: 0,
+        exp: "ممتاز! علامة جزمه الفرعية هي حذف حرف العلة."
+      },
+      {
+        topic: 4,
+        topicTitle: "علامات الإعراب الأصلية والفرعية",
+        q: "في جملة (كرّم المعلمُ أباك)، علامة نصب المفعول به (أباك) هي:",
+        opts: ["الألف لأنه من الأسماء الخمسة", "الفتحة الظاهرة", "الياء لأنه مفرد", "الواو"],
+        correct: 0,
+        exp: "صحيح! الأسماء الخمسة تنصب بالألف نيابة عن الفتحة."
+      },
+      {
+        topic: 4,
+        topicTitle: "علامات الإعراب الأصلية والفرعية",
+        q: "ما علامة إعراب المثنى في حالتي النصب والجر؟",
+        opts: ["الياء", "الألف", "الكسرة", "الفتحة"],
+        correct: 0,
+        exp: "صحيح! المثنى يرفع بالألف وينصب ويجر بالياء."
+      },
+      {
+        topic: 4,
+        topicTitle: "علامات الإعراب الأصلية والفرعية",
+        q: "ما قاعدة إعراب الأفعال الخمسة رفعاً ونصباً وجزماً؟",
+        opts: [
+          "تُرفع بثبوت النون، وتُنصب وتُجزم بحذف النون",
+          "تُرفع بالواو، وتُنصب بالياء، وتُجزم بالسكون",
+          "تُرفع بالضمة، وتُنصب بالفتحة، وتُجزم بحذف العلة",
+          "تُبنى دائماً على السكون"
+        ],
+        correct: 0,
+        exp: "إجابة متكاملة 100%! الأفعال الخمسة ترفع بثبوت النون وتنصب وتجزم بحذفها."
+      }
+    ];
+
+    // Quiz State Engine
+    let currentPool = [...masterBank];
+    let qIndex = 0;
+    let earnedScore = 0;
+    let currentFilterTag = 'all';
+
+    function applyQuizFilter(filterVal) {
+      currentFilterTag = filterVal;
+      
+      document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
+      const pills = document.querySelectorAll('.filter-pill');
+      if (filterVal === 'all') pills[0].classList.add('active');
+      else if (filterVal === 1) pills[1].classList.add('active');
+      else if (filterVal === 2) pills[2].classList.add('active');
+      else if (filterVal === 3) pills[3].classList.add('active');
+      else if (filterVal === 4) pills[4].classList.add('active');
+
+      if (filterVal === 'all') {
+        currentPool = [...masterBank];
+      } else {
+        currentPool = masterBank.filter(item => item.topic === filterVal);
+      }
+
+      resetActiveQuiz();
+    }
+
+    function triggerDirectQuiz(topicNum) {
+      switchActiveView('quiz');
+      applyQuizFilter(topicNum);
+      window.scrollTo({ top: 180, behavior: 'smooth' });
+    }
+
+    function resetActiveQuiz() {
+      qIndex = 0;
+      earnedScore = 0;
+      document.getElementById('hud-score-number').innerText = earnedScore;
+      document.getElementById('quiz-live-box').style.display = 'block';
+      document.getElementById('quiz-finish-box').style.display = 'none';
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      if (currentPool.length === 0) return;
+      const data = currentPool[qIndex];
+
+      document.getElementById('quiz-topic-badge').innerText = `الموضوع: ${data.topicTitle}`;
+      document.getElementById('quiz-step-label').innerText = `السؤال ${qIndex + 1} من ${currentPool.length}`;
+      document.getElementById('quiz-question-header').innerText = data.q;
+
+      // Update Live Progress Bar
+      const pct = ((qIndex) / currentPool.length) * 100;
+      document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+
+      const optionsBox = document.getElementById('quiz-options-grid');
+      optionsBox.innerHTML = '';
+
+      const feedback = document.getElementById('quiz-feedback-banner');
+      feedback.style.display = 'none';
+      document.getElementById('btn-next-step').style.display = 'none';
+
+      data.opts.forEach((optText, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'answer-card-btn';
+        btn.innerHTML = `<i class="fa-regular fa-circle-dot" style="color: #60a5fa; font-size: 1.1rem;"></i> <span>${optText}</span>`;
+        btn.onclick = () => evaluateAnswer(i);
+        optionsBox.appendChild(btn);
+      });
+    }
+
+    function evaluateAnswer(choiceIndex) {
+      const data = currentPool[qIndex];
+      const buttons = document.querySelectorAll('.answer-card-btn');
+      const feedback = document.getElementById('quiz-feedback-banner');
+
+      buttons.forEach(b => b.disabled = true);
+
+      if (choiceIndex === data.correct) {
+        soundSuccess();
+        buttons[choiceIndex].classList.add('correct-glow');
+        buttons[choiceIndex].querySelector('i').className = 'fa-solid fa-circle-check';
+
+        feedback.style.display = 'block';
+        feedback.style.background = 'rgba(16, 185, 129, 0.18)';
+        feedback.style.border = '1px solid rgba(16, 185, 129, 0.45)';
+        feedback.style.color = '#6ee7b7';
+        feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${data.exp}`;
+
+        earnedScore += 10;
+        document.getElementById('hud-score-number').innerText = earnedScore;
+
+        confetti({
+          particleCount: 90,
+          spread: 75,
+          origin: { y: 0.6 }
+        });
+      } else {
+        soundError();
+        buttons[choiceIndex].classList.add('wrong-glow');
+        buttons[choiceIndex].querySelector('i').className = 'fa-solid fa-circle-xmark';
+
+        // Reveal the correct option
+        buttons[data.correct].classList.add('correct-glow');
+        buttons[data.correct].querySelector('i').className = 'fa-solid fa-circle-check';
+
+        feedback.style.display = 'block';
+        feedback.style.background = 'rgba(244, 63, 94, 0.18)';
+        feedback.style.border = '1px solid rgba(244, 63, 94, 0.45)';
+        feedback.style.color = '#fda4af';
+        feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> إجابة غير صحيحة! الخيار الصحيح هو: "<strong>${data.opts[data.correct]}</strong>". <br><span style="color:#f1f5f9; font-size: 1.05rem; margin-top: 4px; display:inline-block;">📌 ${data.exp}</span>`;
+      }
+
+      document.getElementById('btn-next-step').style.display = 'inline-flex';
+    }
+
+    function proceedNextQuestion() {
+      qIndex++;
+      if (qIndex < currentPool.length) {
+        renderCurrentQuestion();
+      } else {
+        showQuizFinish();
+      }
+    }
+
+    function showQuizFinish() {
+      document.getElementById('quiz-progress-bar').style.width = `100%`;
+      document.getElementById('quiz-live-box').style.display = 'none';
+      const finishScreen = document.getElementById('quiz-finish-box');
+      finishScreen.style.display = 'block';
+
+      const maxScore = currentPool.length * 10;
+      const finalPct = Math.round((earnedScore / maxScore) * 100);
+
+      document.getElementById('finish-stats-msg').innerText = 
+        `حصدت ${earnedScore} درجة من أصل ${maxScore} درجة كاملة.`;
+      document.getElementById('finish-percentage-num').innerText = `${finalPct}% تفوق نحوي`;
+
+      confetti({
+        particleCount: 220,
+        spread: 120,
+        origin: { y: 0.5 }
+      });
+    }
+
+    // Tab Switching Functionality
+    function switchActiveView(viewName) {
+      document.querySelectorAll('.tab-trigger').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.section-tab-pane').forEach(pane => pane.classList.remove('active'));
+
+      if (viewName === 'summary') {
+        document.getElementById('tab-btn-summary').classList.add('active');
+        document.getElementById('pane-summary').classList.add('active');
+      } else {
+        document.getElementById('tab-btn-quiz').classList.add('active');
+        document.getElementById('pane-quiz').classList.add('active');
+        if (qIndex === 0 && document.getElementById('quiz-live-box').style.display !== 'none') {
+          renderCurrentQuestion();
+        }
+      }
+    }
+
+    // Initial render
+    renderCurrentQuestion();
   </script>
 </body>
 </html>
