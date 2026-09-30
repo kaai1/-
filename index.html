@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>منصة الكفايات اللغوية 1 | ثانوية الأمير عبدالمحسن</title>
 
-  <!-- Google Fonts: Cairo & Tajawal for supreme Arabic legibility -->
+  <!-- Google Fonts: Cairo & Tajawal -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900;1000&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -37,7 +37,6 @@
       --card-radius: 24px;
     }
 
-    /* نمط البروجكتر فائق التباين وتكبير الحجم */
     body.projector-mode {
       --base-font-size: 22px;
       --bg-base: #030712;
@@ -70,7 +69,6 @@
       transition: background-color 0.4s ease, font-size 0.2s ease;
     }
 
-    /* Ambient Futuristic Background Gradients */
     .ambient-glow {
       position: fixed;
       border-radius: 50%;
@@ -102,7 +100,6 @@
       background: radial-gradient(circle, #059669, transparent 70%);
     }
 
-    /* Floating Grid Background Line effect */
     .bg-grid-overlay {
       position: fixed;
       inset: 0;
@@ -114,7 +111,6 @@
       z-index: 1;
     }
 
-    /* Glass Container Standard */
     .glass-panel {
       background: var(--bg-card);
       backdrop-filter: blur(20px);
@@ -494,6 +490,7 @@
     }
 
     .cyber-lesson-card.theme-1 .card-glow-edge { background: linear-gradient(180deg, #38bdf8, #2563eb); }
+    .cyber-lesson-card.theme-v .card-glow-edge { background: linear-gradient(180deg, #06b6d4, #0284c7); }
     .cyber-lesson-card.theme-2 .card-glow-edge { background: linear-gradient(180deg, #c084fc, #7c3aed); }
     .cyber-lesson-card.theme-3 .card-glow-edge { background: linear-gradient(180deg, #34d399, #059669); }
     .cyber-lesson-card.theme-4 .card-glow-edge { background: linear-gradient(180deg, #fbbf24, #d97706); }
@@ -527,6 +524,7 @@
     }
 
     .theme-1 .lesson-badge-orb { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .theme-v .lesson-badge-orb { background: rgba(6, 182, 212, 0.15); color: #06b6d4; border: 1px solid rgba(6, 182, 212, 0.3); }
     .theme-2 .lesson-badge-orb { background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.3); }
     .theme-3 .lesson-badge-orb { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }
     .theme-4 .lesson-badge-orb { background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
@@ -599,6 +597,7 @@
     }
 
     .theme-1 .tile-title { color: #38bdf8; }
+    .theme-v .tile-title { color: #06b6d4; }
     .theme-2 .tile-title { color: #c084fc; }
     .theme-3 .tile-title { color: #34d399; }
     .theme-4 .tile-title { color: #fbbf24; }
@@ -623,6 +622,7 @@
       gap: 8px;
     }
 
+    .theme-v .tile-highlight-code { border-right-color: #06b6d4; }
     .theme-2 .tile-highlight-code { border-right-color: #c084fc; }
     .theme-3 .tile-highlight-code { border-right-color: #34d399; }
     .theme-4 .tile-highlight-code { border-right-color: #fbbf24; }
@@ -640,7 +640,6 @@
       font-size: 1.05rem;
     }
 
-    /* Cyber Table styling for Grammatical markers */
     .cyber-table-wrap {
       overflow-x: auto;
       border-radius: 16px;
@@ -719,7 +718,6 @@
       box-shadow: 0 4px 18px rgba(37, 99, 235, 0.45);
     }
 
-    /* Live Progress Bar */
     .quiz-status-meta {
       display: flex;
       justify-content: space-between;
@@ -865,7 +863,6 @@
       box-shadow: 0 12px 30px rgba(37, 99, 235, 0.7);
     }
 
-    /* Result Celebration Trophy Screen */
     .celebration-screen {
       text-align: center;
       padding: 50px 20px;
@@ -931,7 +928,6 @@
       </div>
 
       <div class="hero-cards-grid">
-        
         <!-- School Card -->
         <div class="cyber-id-card school-card">
           <div class="id-card-icon">
@@ -964,7 +960,6 @@
             <strong>عصام عبد المنان </strong>
           </div>
         </div>
-
       </div>
 
     </div>
@@ -975,12 +970,12 @@
       <button class="tab-trigger active" id="tab-btn-summary" onclick="switchActiveView('summary')">
         <i class="fa-solid fa-book-sparkles"></i>
         <span>ملخص الدروس</span>
-        <span class="tab-badge">4 دروس</span>
+        <span class="tab-badge">5 دروس</span>
       </button>
       <button class="tab-trigger" id="tab-btn-quiz" onclick="switchActiveView('quiz')">
         <i class="fa-solid fa-gamepad"></i>
         <span>المسابقة والتحديات</span>
-        <span class="tab-badge">40 سؤالاً</span>
+        <span class="tab-badge">50 سؤالاً</span>
       </button>
     </nav>
   </section>
@@ -1041,7 +1036,60 @@
           </div>
         </article>
 
-        <!-- Lesson 2: إعراب الفعل المضارع -->
+        <!-- Lesson 2 (الجديد): الجملة الفعلية وأركانها -->
+        <article class="cyber-lesson-card theme-v">
+          <div class="card-glow-edge"></div>
+          
+          <div class="lesson-title-area">
+            <div class="lesson-headline">
+              <div class="lesson-badge-orb"><i class="fa-solid fa-person-running"></i></div>
+              <div>
+                <h2>2. الجملة الفعلية وأركانها</h2>
+                <p>الفعل (ماضٍ، مضارع، أمر) • الفاعل ونائبه • المفعول به والمتممات</p>
+              </div>
+            </div>
+            <button class="btn-launch-quiz" onclick="triggerDirectQuiz(5)">
+              <span>بدء اختبار هذا الدرس (10 أسئلة)</span>
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+          </div>
+
+          <div class="knowledge-tiles-grid">
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> مفهوم الجملة الفعلية والفعل</div>
+                <div class="tile-desc">كل جملة تبدأ بـ <strong>فعل تام</strong> تدل على حدوث شيء في زمن معين (ماضٍ، مضارع، أمر).</div>
+              </div>
+              <div class="tile-highlight-code">أزمنة الفعل: (كَتَبَ: ماضٍ) • (يَكْتُبُ: مضارع) • (اكْتُبْ: أمر)</div>
+            </div>
+
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> أركان الجملة (لازم ومتعدٍّ)</div>
+                <div class="tile-desc">
+                  <strong>فعل لازم:</strong> يكتفي بفاعله لإتمام المعنى.<br>
+                  <strong>فعل متعدٍّ:</strong> لا يكتفي بالفاعل بل يحتاج لمفعول به واحد أو أكثر.
+                </div>
+              </div>
+              <div class="tile-highlight-code">اللازم: نَامَ الطفلُ | المتعدي: شَرِبَ الولدُ الحليبَ</div>
+            </div>
+
+            <div class="knowledge-tile">
+              <div>
+                <div class="tile-title"><i class="fa-solid fa-circle-dot"></i> المفعول به والمتممات</div>
+                <div class="tile-desc">المفعول به اسم منصوب يدل على من وقع عليه فعل الفاعل، وتكتمل الجملة بمتممات كالمفاعيل وحروف الجر والحال.</div>
+              </div>
+              <div class="tile-highlight-code">مثال: قَرَأَ الطالبُ القصّةَ (القصّةَ: مفعول به منصوب)</div>
+            </div>
+          </div>
+
+          <div class="key-golden-rule">
+            <i class="fa-solid fa-bolt" style="color: #fbbf24; font-size: 1.3rem;"></i>
+            <span>الخلاصة المضيئة: الركنان الأساسيان للجملة الفعلية هما (الفعل + الفاعل)، والمفعول به متمم أساسي في المتعدي!</span>
+          </div>
+        </article>
+
+        <!-- Lesson 3: إعراب الفعل المضارع -->
         <article class="cyber-lesson-card theme-2">
           <div class="card-glow-edge"></div>
 
@@ -1049,7 +1097,7 @@
             <div class="lesson-headline">
               <div class="lesson-badge-orb"><i class="fa-solid fa-pen-nib"></i></div>
               <div>
-                <h2>2. إعراب الفعل المضارع</h2>
+                <h2>3. إعراب الفعل المضارع</h2>
                 <p>حالات الرفع، النصب، والجزم بالأدوات والعلامات الأصلية والفرعية</p>
               </div>
             </div>
@@ -1091,7 +1139,7 @@
           </div>
         </article>
 
-        <!-- Lesson 3: الفاعل ونائب الفاعل -->
+        <!-- Lesson 4: الفاعل ونائب الفاعل -->
         <article class="cyber-lesson-card theme-3">
           <div class="card-glow-edge"></div>
 
@@ -1099,7 +1147,7 @@
             <div class="lesson-headline">
               <div class="lesson-badge-orb"><i class="fa-solid fa-scale-balanced"></i></div>
               <div>
-                <h2>3. الفاعل ونائب الفاعل</h2>
+                <h2>4. الفاعل ونائب الفاعل</h2>
                 <p>الجملة الفعلية، صيغ المبني للمجهول، وحكم نائب الفاعل المرفوع</p>
               </div>
             </div>
@@ -1144,7 +1192,7 @@
           </div>
         </article>
 
-        <!-- Lesson 4: جدول علامات الإعراب -->
+        <!-- Lesson 5: جدول علامات الإعراب -->
         <article class="cyber-lesson-card theme-4">
           <div class="card-glow-edge"></div>
 
@@ -1152,7 +1200,7 @@
             <div class="lesson-headline">
               <div class="lesson-badge-orb"><i class="fa-solid fa-table-list"></i></div>
               <div>
-                <h2>4. جدول علامات الإعراب الأصلية والفرعية</h2>
+                <h2>5. جدول علامات الإعراب الأصلية والفرعية</h2>
                 <p>مرجع الحركات الأصلية والحروف والنيابة في الأسماء والأفعال</p>
               </div>
             </div>
@@ -1212,19 +1260,22 @@
         <!-- Filter Tabs -->
         <div class="quiz-filter-dock">
           <button class="filter-pill active" onclick="applyQuizFilter('all')">
-            <i class="fa-solid fa-layer-group"></i> جميع الدروس (40 سؤالاً)
+            <i class="fa-solid fa-layer-group"></i> جميع الدروس (50 سؤالاً)
           </button>
           <button class="filter-pill" onclick="applyQuizFilter(1)">
             <i class="fa-solid fa-diagram-project"></i> 1. الجملة الاسمية (10)
           </button>
+          <button class="filter-pill" onclick="applyQuizFilter(5)">
+            <i class="fa-solid fa-person-running"></i> 2. الجملة الفعلية (10)
+          </button>
           <button class="filter-pill" onclick="applyQuizFilter(2)">
-            <i class="fa-solid fa-pen-nib"></i> 2. الفعل المضارع (10)
+            <i class="fa-solid fa-pen-nib"></i> 3. الفعل المضارع (10)
           </button>
           <button class="filter-pill" onclick="applyQuizFilter(3)">
-            <i class="fa-solid fa-scale-balanced"></i> 3. الفاعل ونائبه (10)
+            <i class="fa-solid fa-scale-balanced"></i> 4. الفاعل ونائبه (10)
           </button>
           <button class="filter-pill" onclick="applyQuizFilter(4)">
-            <i class="fa-solid fa-table-list"></i> 4. علامات الإعراب (10)
+            <i class="fa-solid fa-table-list"></i> 5. علامات الإعراب (10)
           </button>
         </div>
 
@@ -1233,7 +1284,7 @@
           <div class="quiz-status-meta">
             <div>
               <span class="topic-indicator" id="quiz-topic-badge">الموضوع: الجملة الاسمية</span>
-              <span style="margin-right: 14px; font-weight: 800; color: #fff;" id="quiz-step-label">السؤال 1 من 40</span>
+              <span style="margin-right: 14px; font-weight: 800; color: #fff;" id="quiz-step-label">السؤال 1 من 50</span>
             </div>
             <div class="hud-score-display">
               <i class="fa-solid fa-gem"></i>
@@ -1281,7 +1332,7 @@
   </main>
 
   <script>
-    // Synth Audio Engine via Web Audio API (zero external sound dependencies)
+    // Synth Audio Engine
     let isSoundMuted = false;
     let audioContext = null;
 
@@ -1306,9 +1357,9 @@
     }
 
     function soundSuccess() {
-      playAudioTone(523.25, 'sine', 0.12, 0.15); // C5
-      setTimeout(() => playAudioTone(659.25, 'sine', 0.14, 0.15), 90); // E5
-      setTimeout(() => playAudioTone(783.99, 'sine', 0.28, 0.2), 180); // G5
+      playAudioTone(523.25, 'sine', 0.12, 0.15);
+      setTimeout(() => playAudioTone(659.25, 'sine', 0.14, 0.15), 90);
+      setTimeout(() => playAudioTone(783.99, 'sine', 0.28, 0.2), 180);
     }
 
     function soundError() {
@@ -1343,7 +1394,7 @@
       }
     }
 
-    // Complete Database with 40 Accurate High-School Questions (10 per topic)
+    // Complete Database with 50 Questions (10 per topic)
     const masterBank = [
       /* ================= 1. الجملة الاسمية ونواسخها (10 أسئلة) ================= */
       {
@@ -1457,7 +1508,139 @@
         exp: "ممتاز! الفعل (يشرح) والفاعل المستتر في محل رفع خبر المبتدأ (جملة فعلية)."
       },
 
-      /* ================= 2. إعراب الفعل المضارع (10 أسئلة) ================= */
+      /* ================= 2. الجملة الفعلية وأركانها (10 أسئلة جديدة) ================= */
+      {
+        topic: 5,
+        topicTitle: "الجملة الفعلية وأركانها",
+        q: "تتكون الجملة الفعلية الأساسية من ركنين رئيسين هما:",
+        opts: [
+          "الفعل والفاعل",
+          "المبتدأ والخبر",
+          "الفعل والمفعول به فقط",
+          "الفاعل ونائب الفاعل"
+        ],
+        correct: 0,
+        exp: "صحيح! الركنان الأساسيان اللذان لا تستغني عنهما الجملة الفعلية هما الفعل والفاعل."
+      },
+      {
+        topic: 5,
+        topicTitle: "الجملة الفعلية وأركانها",
+        q: "ما هو الفعل اللازم من بين الأفعال التالية؟",
+        opts: [
+          "جَلَسَ",
+          "كَتَبَ",
+          "قَرَأَ",
+          "فَهِمَ"
+        ],
+        correct: 0,
+        exp: "أحسنت! الفعل (جلس) لازم يكتفي بفاعله (جلس محمدٌ) ولا يتعدى إلى مفعول به."
+      },
+      {
+        topic: 5,
+        topicTitle: "الجملة الفعلية وأركانها",
+        q: "في جملة (كرّمَ المديرُ المتفوقينَ)، ما إعراب كلمة (المتفوقين)؟",
+        opts: [
+          "مفعول به منصوب وعلامة نصبه الياء لأنه جمع مذكر سالم",
+          "فاعل مرفوع وعلامة رفعه الواو",
+          "مضاف إليه مجرور بالياء",
+          "نعت منصوب بالفتحة"
+        ],
+        correct: 0,
+        exp: "إجابة صحيحة! وقع عليه التكريم فهو مفعول به منصوب بالياء."
+      },
+      {
+        topic: 5,
+        topicTitle: "الجملة الفعلية وأركانها",
+        q: "أيّ الجمل الآتية تحتوي على فعل متعدٍّ لمفعولين؟",
+        opts: [
+          "منحَ المعلمُ الطالبَ جائزةً",
+          "نجحَ الطالبُ في الامتحانِ",
+          "شربَ المريضُ الدواءَ",
+          "أشرقتِ الشمسُ صباحاً"
+        ],
+        correct: 0,
+        exp: "ممتاز! الفعل (منح) ينصب مفعولين ليس أصلهما مبتدأ وخبراً (الطالبَ: مفعول أول، جائزةً: مفعول ثانٍ)."
+      },
+      {
+        topic: 5,
+        topicTitle: "الجملة الفعلية وأركانها",
+        q: "الفعل الماضي في أصله مبني على:",
+        opts: [
+          "الفتح (إذا لم يتصل به شيء)",
+          "الضم دائماً",
+          "السكون دائماً",
+          "الكسر"
+        ],
+        correct: 0,
+        exp: "صحيح! الأصل في الفعل الماضي البناء على الفتح مثل (كَتَبَ، حَفِظَ)."
+      },
+      {
+        topic: 5,
+        topicTitle: "الجملة الفعلية وأركانها",
+        q: "ما نوع الفاعل في جملة (أحبُّ لغتي العربية)؟",
+        opts: [
+          "ضمير مستتر تقديره (أنا)",
+          "اسم ظاهر (لغتي)",
+          "ضمير متصل (الياء)",
+          "شبه جملة"
+        ],
+        correct: 0,
+        exp: "دقيق! الفاعل هنا ضمير مستتر وجوباً تقديره (أنا)."
+      },
+      {
+        topic: 5,
+        topicTitle: "الجملة الفعلية وأركانها",
+        q: "يبنى فعل الأمر على ما يُجزم به مضارعه، فإذا كان صحيح الآخر يبنى على:",
+        opts: [
+          "السكون",
+          "الفتح",
+          "الضمة المقدرة",
+          "حذف حرف العلة"
+        ],
+        correct: 0,
+        exp: "صحيح! يبنى فعل الأمر الصحيح الآخر على السكون مثل: (احفظْ درسك)."
+      },
+      {
+        topic: 5,
+        topicTitle: "الجملة الفعلية وأركانها",
+        q: "ما حكم المفعول به الإعرابي دائماً؟",
+        opts: [
+          "النصب دائماً",
+          "الرفع دائماً",
+          "الجر دائماً",
+          "الجزم دائماً"
+        ],
+        correct: 0,
+        exp: "أحسنت! المفعول به من عائلة المنصوبات وحكمه النصب دائماً."
+      },
+      {
+        topic: 5,
+        topicTitle: "الجملة الفعلية وأركانها",
+        q: "أي الجمل الآتية تبدأ بفعل أمر مبني على حذف النون؟",
+        opts: [
+          "اكتبوا واجباتكم بانتظام",
+          "اكتبْ واجبك بانتظام",
+          "يكتبون واجباتهم بانتظام",
+          "لن يكتبوا الدرس"
+        ],
+        correct: 0,
+        exp: "ممتاز! لاتصاله بواو الجماعة، فيبنى على حذف النون لأن مضارعه من الأفعال الخمسة."
+      },
+      {
+        topic: 5,
+        topicTitle: "الجملة الفعلية وأركانها",
+        q: "الفعل المتعدي هو الفعل الذي:",
+        opts: [
+          "يتعدى الفاعل إلى مفعول به لإتمام المعنى",
+          "يكتفي بفاعله ولا يحتاج لمفعول به",
+          "يدخل على المبتدأ والخبر فقط",
+          "يُحذف فاعله وجوباً"
+        ],
+        correct: 0,
+        exp: "صحيح! المتعدي لا يكتمل معناه إلا بوجود مفعول به يتلقى أثر الفعل."
+      },
+
+      /* ================= 3. إعراب الفعل المضارع (10 أسئلة) ================= */
       {
         topic: 2,
         topicTitle: "إعراب الفعل المضارع",
@@ -1589,7 +1772,7 @@
         exp: "دقيق جداً! تقدر الحركات على الألف دائماً للتعذر (استحالة نطق الحركة)."
       },
 
-      /* ================= 3. الفاعل ونائب الفاعل (10 أسئلة) ================= */
+      /* ================= 4. الفاعل ونائب الفاعل (10 أسئلة) ================= */
       {
         topic: 3,
         topicTitle: "الفاعل ونائب الفاعل",
@@ -1691,7 +1874,7 @@
         exp: "صحيح! الأصل في الجمل المتعدية أن ينوب المفعول به عن الفاعل المحذوف."
       },
 
-      /* ================= 4. علامات الإعراب الأصلية والفرعية (10 أسئلة) ================= */
+      /* ================= 5. علامات الإعراب الأصلية والفرعية (10 أسئلة) ================= */
       {
         topic: 4,
         topicTitle: "علامات الإعراب الأصلية والفرعية",
@@ -1797,9 +1980,10 @@
       const pills = document.querySelectorAll('.filter-pill');
       if (filterVal === 'all') pills[0].classList.add('active');
       else if (filterVal === 1) pills[1].classList.add('active');
-      else if (filterVal === 2) pills[2].classList.add('active');
-      else if (filterVal === 3) pills[3].classList.add('active');
-      else if (filterVal === 4) pills[4].classList.add('active');
+      else if (filterVal === 5) pills[2].classList.add('active');
+      else if (filterVal === 2) pills[3].classList.add('active');
+      else if (filterVal === 3) pills[4].classList.add('active');
+      else if (filterVal === 4) pills[5].classList.add('active');
 
       if (filterVal === 'all') {
         currentPool = [...masterBank];
@@ -1833,7 +2017,6 @@
       document.getElementById('quiz-step-label').innerText = `السؤال ${qIndex + 1} من ${currentPool.length}`;
       document.getElementById('quiz-question-header').innerText = data.q;
 
-      // Update Live Progress Bar
       const pct = ((qIndex) / currentPool.length) * 100;
       document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
 
@@ -1884,7 +2067,6 @@
         buttons[choiceIndex].classList.add('wrong-glow');
         buttons[choiceIndex].querySelector('i').className = 'fa-solid fa-circle-xmark';
 
-        // Reveal the correct option
         buttons[data.correct].classList.add('correct-glow');
         buttons[data.correct].querySelector('i').className = 'fa-solid fa-circle-check';
 
@@ -1927,7 +2109,6 @@
       });
     }
 
-    // Tab Switching Functionality
     function switchActiveView(viewName) {
       document.querySelectorAll('.tab-trigger').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.section-tab-pane').forEach(pane => pane.classList.remove('active'));
@@ -1944,7 +2125,6 @@
       }
     }
 
-    // Initial render
     renderCurrentQuestion();
   </script>
 </body>
